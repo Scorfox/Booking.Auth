@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{64A3E3A0-389C-417F-85D1-FF0418B0E77D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{1D4057A2-F0DC-4F61-A165-8D8082BD411F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{80D1115E-FA16-4715-ACDA-F2395B174446}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{1807A9DC-A5A2-4010-88A4-7F1DDC2A8E99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Booking.Auth.Domain", "src\Core\Booking.Auth.Domain\Booking.Auth.Domain.csproj", "{CB8E8711-1328-4F18-B407-0D32727FA1CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Booking.Auth.Application", "src\Core\Booking.Auth.Application\Booking.Auth.Application.csproj", "{071BBA62-35FD-4115-8066-1BB47FD2F1F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Booking.Auth.Persistence", "src\Infrastructure\Booking.Auth.Persistence\Booking.Auth.Persistence.csproj", "{189AEC2B-9077-45AB-BC8C-7A31A8DEEC1B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Booking.Auth.WebAPI", "src\Presentation\Booking.Auth.WebAPI\Booking.Auth.WebAPI.csproj", "{AA62FC93-2ACC-408D-A793-FE3204F24DB9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CB8E8711-1328-4F18-B407-0D32727FA1CD} = {64A3E3A0-389C-417F-85D1-FF0418B0E77D}
+		{071BBA62-35FD-4115-8066-1BB47FD2F1F8} = {64A3E3A0-389C-417F-85D1-FF0418B0E77D}
+		{189AEC2B-9077-45AB-BC8C-7A31A8DEEC1B} = {1D4057A2-F0DC-4F61-A165-8D8082BD411F}
+		{AA62FC93-2ACC-408D-A793-FE3204F24DB9} = {80D1115E-FA16-4715-ACDA-F2395B174446}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CB8E8711-1328-4F18-B407-0D32727FA1CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB8E8711-1328-4F18-B407-0D32727FA1CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB8E8711-1328-4F18-B407-0D32727FA1CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB8E8711-1328-4F18-B407-0D32727FA1CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{071BBA62-35FD-4115-8066-1BB47FD2F1F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{071BBA62-35FD-4115-8066-1BB47FD2F1F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{071BBA62-35FD-4115-8066-1BB47FD2F1F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{071BBA62-35FD-4115-8066-1BB47FD2F1F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{189AEC2B-9077-45AB-BC8C-7A31A8DEEC1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{189AEC2B-9077-45AB-BC8C-7A31A8DEEC1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{189AEC2B-9077-45AB-BC8C-7A31A8DEEC1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{189AEC2B-9077-45AB-BC8C-7A31A8DEEC1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA62FC93-2ACC-408D-A793-FE3204F24DB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA62FC93-2ACC-408D-A793-FE3204F24DB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA62FC93-2ACC-408D-A793-FE3204F24DB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA62FC93-2ACC-408D-A793-FE3204F24DB9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
