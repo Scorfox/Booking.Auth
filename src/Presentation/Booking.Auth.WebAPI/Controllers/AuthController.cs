@@ -1,4 +1,5 @@
 ﻿using Booking.Auth.Application.Features.AuthFeatures;
+using Booking.Auth.Domain.Entities;
 using Booking.Auth.WebAPI.Models;
 using Booking.Auth.WebAPI.Services;
 using MediatR;
@@ -26,6 +27,15 @@ public class AuthController : ControllerBase
         CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(request, cancellationToken);
-        return response.success ? Ok(_jwtTokenGenerator.GenerateToken(request.Email, response.roleName)) : Unauthorized();
+        if (response.success)
+        {
+            var accessToken = _jwtTokenGenerator.GenerateToken(request.Email, response.roleName);
+            var refreshToken = _jwtTokenGenerator.GenerateRefreshToken();
+            return Ok(new { access_token = accessToken, refresh_token = refreshToken });
+        }
+        else
+        {
+            return Unauthorized();
+        }
     }
 }
