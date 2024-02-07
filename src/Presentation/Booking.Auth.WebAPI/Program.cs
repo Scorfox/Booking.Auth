@@ -1,10 +1,12 @@
 using System.Text;
 using Booking.Auth.Application;
+using Booking.Auth.Application.Consumers.Client;
 using Booking.Auth.Persistence;
 using Booking.Auth.Persistence.Context;
 using Booking.Auth.WebAPI.Extensions;
 using Booking.Auth.WebAPI.Options;
 using Booking.Auth.WebAPI.Services;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -46,6 +48,22 @@ builder.Services.AddSwaggerGen(opt =>
             new string[]{}
         }
     });
+});
+
+builder.Services.AddMassTransit(x =>
+{
+    // Добавляем шину сообщений
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(builder.Configuration["RabbitMQ:Host"], h =>
+        {
+            h.Username(builder.Configuration["RabbitMQ:Username"]);
+            h.Password(builder.Configuration["RabbitMQ:Password"]);
+        });
+        cfg.ConfigureEndpoints(context);
+    });
+    
+    x.AddConsumer<CreateClientConsumer>();
 });
 
 builder.Services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();
