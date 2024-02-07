@@ -1,6 +1,6 @@
 using System.Text;
 using Booking.Auth.Application;
-using Booking.Auth.Application.Consumers.Client;
+using Booking.Auth.Application.Consumers.User;
 using Booking.Auth.Persistence;
 using Booking.Auth.Persistence.Context;
 using Booking.Auth.WebAPI.Extensions;
@@ -63,7 +63,7 @@ builder.Services.AddMassTransit(x =>
         cfg.ConfigureEndpoints(context);
     });
     
-    x.AddConsumer<CreateClientConsumer>();
+    x.AddConsumer<CreateUserConsumer>();
 });
 
 builder.Services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();
