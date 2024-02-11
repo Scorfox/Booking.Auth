@@ -8,28 +8,30 @@ using Otus.Booking.Common.Booking.Contracts.Authentication.Responses;
 
 namespace Booking.Auth.Application.Consumers.User;
 
-public class CreateUserConsumer : IConsumer<CreateUser>
+public class UpdateUserConsumer : IConsumer<UpdateUser>
 {
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
 
-    public CreateUserConsumer(IUserRepository userRepository, IMapper mapper)
+    public UpdateUserConsumer(IUserRepository userRepository, IMapper mapper)
     {
         _userRepository = userRepository;
         _mapper = mapper;
     }
     
-    public async Task Consume(ConsumeContext<CreateUser> context)
+    public async Task Consume(ConsumeContext<UpdateUser> context)
     {
         var request = context.Message;
-        if (await _userRepository.HasAnyByEmailAsync(request.Email))
-            throw new BadRequestException($"User with {request.Email} already exists");
-            
-        var user = _mapper.Map<Domain.Entities.User>(request);
+        var user = await _userRepository.Get(request.Id);
+        
+        if (user == null)
+            throw new BadRequestException($"User with ID {request.Id} doesn't exist");
+        
+        _mapper.Map(request, user);
         user.PasswordHash = new PasswordHasher<Domain.Entities.User>().HashPassword(user, request.Password);
         
-        await _userRepository.Create(user);
+        await _userRepository.Update(user);
 
-        await context.RespondAsync(_mapper.Map<CreateUserResult>(user));
+        await context.RespondAsync(_mapper.Map<UpdateUserResult>(user));
     }
 }

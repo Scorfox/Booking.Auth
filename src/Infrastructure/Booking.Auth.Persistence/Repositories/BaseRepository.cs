@@ -21,10 +21,11 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
         await Context.SaveChangesAsync();
     }
 
-    public void Update(T entity)
+    public async Task Update(T entity)
     {
         entity.UpdatedAt = DateTimeOffset.UtcNow;
         Context.Update(entity);
+        await Context.SaveChangesAsync();
     }
 
     public void Delete(T entity)

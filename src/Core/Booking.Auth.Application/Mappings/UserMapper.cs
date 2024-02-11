@@ -2,13 +2,16 @@
 using Otus.Booking.Common.Booking.Contracts.Authentication.Requests;
 using Otus.Booking.Common.Booking.Contracts.Authentication.Responses;
 
-namespace Booking.Auth.Application.Consumers.User;
+namespace Booking.Auth.Application.Mappings;
 
-public sealed class CreateUserMapper : Profile
+public sealed class UserMapper : Profile
 {
-    public CreateUserMapper()
+    public UserMapper()
     {
         CreateMap<CreateUser, Domain.Entities.User>();
         CreateMap<Domain.Entities.User, CreateUserResult>();
+        
+        CreateMap<UpdateUser, Domain.Entities.User>();
+        CreateMap<Domain.Entities.User, UpdateUserResult>();
     }
 }
