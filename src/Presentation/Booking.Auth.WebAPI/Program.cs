@@ -64,6 +64,7 @@ builder.Services.AddMassTransit(x =>
     });
     
     x.AddConsumer<CreateUserConsumer>();
+    x.AddConsumer<UpdateUserConsumer>();
 });
 
 builder.Services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();
