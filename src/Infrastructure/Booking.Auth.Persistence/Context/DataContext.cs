@@ -41,11 +41,10 @@ public class DataContext : DbContext
             Login = "admin",
             Email = "dadkova-anna@mail.ru",
             PasswordHash = "AQAAAAIAAYagAAAAEHpX9YRUx2LHWG4N5dxWszz3Cgn1mdFl6f5l3slTKrMmqFodCjz7abc564LoKqS98w==", //root
-
+            RefreshToken = "4uvqVaGMGf7VF9Dk6+51kM0LFjEh60ghpgmkBz1qNyU=",
             LastName = "Фамилия",
             FirstName = "Имя",
             MiddleName = "Отчество",
-
             EmailConfirmed = true,
             PhoneNumber = "5553555",
             RoleId = superAdminRole.Id
