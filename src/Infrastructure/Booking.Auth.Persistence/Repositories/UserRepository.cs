@@ -26,4 +26,9 @@ public class UserRepository(DataContext context) : BaseRepository<User>(context)
         return Context.Users
             .AnyAsync(x => x.Email == email, cancellationToken);
     }
+
+    public async Task SaveChangesAsync()
+    {
+        await context.SaveChangesAsync();
+    }
 }

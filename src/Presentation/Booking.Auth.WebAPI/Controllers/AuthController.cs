@@ -21,7 +21,7 @@ public class AuthController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost]
+    [HttpPost("Login")]
     [AllowAnonymous]
     public async Task<ActionResult<TokenDto>> Login(AuthenticateRequest request,
         CancellationToken cancellationToken)
@@ -29,13 +29,24 @@ public class AuthController : ControllerBase
         var response = await _mediator.Send(request, cancellationToken);
         if (response.success)
         {
-            var accessToken = _jwtTokenGenerator.GenerateToken(request.Email, response.roleName);
-            var refreshToken = _jwtTokenGenerator.GenerateRefreshToken();
-            return Ok(new { access_token = accessToken, refresh_token = refreshToken });
+            return Ok(_jwtTokenGenerator.GenerateToken(request.Email, response.roleName));
         }
         else
         {
             return Unauthorized();
         }
+    }
+
+    [HttpPost("Refresh")]
+    [AllowAnonymous]
+    public async Task<ActionResult<TokenDto>> Refresh(AuthenticateResponse request,
+        CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(request, cancellationToken);
+        if (response != null)
+        {
+            return Ok(_jwtTokenGenerator.RefreshToken(request.AccessToken, request.RefreshToken));
+        }
+            return Unauthorized("Invalid refresh token");
     }
 }
