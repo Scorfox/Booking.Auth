@@ -32,7 +32,7 @@ public sealed class CreateUserHandler : IRequestHandler<CreateUserRequest, Creat
         user.RoleId = Roles.GetAllRolesWithIds()[Roles.Admin];
         user.PasswordHash = new PasswordHasher<User>().HashPassword(user, request.Password);
         
-        await _userRepository.Create(user);
+        await _userRepository.CreateAsync(user);
 
         return _mapper.Map<CreateUserResponse>(user);
     }

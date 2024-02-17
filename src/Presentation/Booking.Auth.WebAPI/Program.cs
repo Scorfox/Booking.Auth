@@ -1,5 +1,7 @@
 using System.Text;
 using Booking.Auth.Application;
+using Booking.Auth.Application.Consumers.Company;
+using Booking.Auth.Application.Consumers.Filial;
 using Booking.Auth.Application.Consumers.User;
 using Booking.Auth.Persistence;
 using Booking.Auth.Persistence.Context;
@@ -63,8 +65,17 @@ builder.Services.AddMassTransit(x =>
         cfg.ConfigureEndpoints(context);
     });
     
+    // User
     x.AddConsumer<CreateUserConsumer>();
     x.AddConsumer<UpdateUserConsumer>();
+    
+    // Company
+    x.AddConsumer<CreateCompanyConsumer>();
+    x.AddConsumer<UpdateCompanyConsumer>();
+    
+    // Filial
+    x.AddConsumer<CreateFilialConsumer>();
+    x.AddConsumer<UpdateFilialConsumer>();
 });
 
 builder.Services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();

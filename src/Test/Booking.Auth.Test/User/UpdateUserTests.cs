@@ -5,8 +5,8 @@ using Booking.Auth.Application.Mappings;
 using Booking.Auth.Persistence.Repositories;
 using MassTransit;
 using MassTransit.Testing;
-using Otus.Booking.Common.Booking.Contracts.Authentication.Requests;
-using Otus.Booking.Common.Booking.Contracts.Authentication.Responses;
+using Otus.Booking.Common.Booking.Contracts.User.Requests;
+using Otus.Booking.Common.Booking.Contracts.User.Responses;
 
 namespace Booking.Auth.Test.User;
 

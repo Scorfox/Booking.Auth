@@ -16,5 +16,7 @@ public static class ServiceExtensions
         services.AddDbContext<DataContext>(opt => { opt.UseNpgsql(connectionString); });
         services.AddTransient<IRoleRepository, RoleRepository>();
         services.AddTransient<IUserRepository, UserRepository>();
+        services.AddTransient<ICompanyRepository, CompanyRepository>();
+        services.AddTransient<IFilialRepository, FilialRepository>();
     }
 }
