@@ -12,6 +12,8 @@ public class DataContext : DbContext
     
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<Role> Roles { get; set; } = null!;
+    public DbSet<Company> Companies { get; set; } = null!;
+    public DbSet<Filial> Filials { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

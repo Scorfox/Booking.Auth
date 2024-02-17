@@ -6,7 +6,7 @@ using Booking.Auth.Persistence.Repositories;
 using MassTransit;
 using MassTransit.Testing;
 using Microsoft.EntityFrameworkCore;
-using Otus.Booking.Common.Booking.Contracts.Authentication.Requests;
+using Otus.Booking.Common.Booking.Contracts.User.Requests;
 
 namespace Booking.Auth.Test.User;
 

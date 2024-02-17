@@ -14,32 +14,38 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
         Context = context;
     }
     
-    public async Task Create(T entity)
+    public async Task CreateAsync(T entity)
     {
         entity.CreatedAt = DateTimeOffset.UtcNow;
         await Context.AddAsync(entity);
         await Context.SaveChangesAsync();
     }
 
-    public async Task Update(T entity)
+    public async Task UpdateAsync(T entity)
     {
         entity.UpdatedAt = DateTimeOffset.UtcNow;
         Context.Update(entity);
         await Context.SaveChangesAsync();
     }
 
-    public void Delete(T entity)
+    public async Task Delete(T entity)
     {
         Context.Remove(entity);
+        await Context.SaveChangesAsync();
     }
 
-    public Task<T> Get(Guid id, CancellationToken cancellationToken)
+    public async Task<T?> FindByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return Context.Set<T>().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        return await Context.Set<T>().SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
-    public Task<List<T>> GetAll(CancellationToken cancellationToken)
+    public async Task<bool> HasAnyByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return Context.Set<T>().ToListAsync(cancellationToken);
+        return await Context.Set<T>().AnyAsync(x => x.Id == id, cancellationToken);
+    }
+
+    public async Task<List<T>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        return await Context.Set<T>().ToListAsync(cancellationToken);
     }
 }

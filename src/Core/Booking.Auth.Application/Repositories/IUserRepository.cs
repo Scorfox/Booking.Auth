@@ -6,4 +6,5 @@ public interface IUserRepository : IBaseRepository<User>
 {
     Task<User?> FindByEmailAsync(bool useAsNoTracking, string email, CancellationToken token = default);
     Task<bool> HasAnyByEmailAsync(string email, CancellationToken token = default);
+    Task<bool> HasAnyByEmailExceptIdAsync(Guid id, string email, CancellationToken token = default);
 }

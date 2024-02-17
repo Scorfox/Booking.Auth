@@ -30,7 +30,7 @@ public sealed class CreateClientHandler : IRequestHandler<CreateClientRequest, C
         user.Role = (await _roleRepository.GetByNameAsync(Roles.Client, cancellationToken))!;
         user.PasswordHash = new PasswordHasher<User>().HashPassword(user, request.Password);
         
-        await _userRepository.Create(user);
+        await _userRepository.CreateAsync(user);
 
         return _mapper.Map<CreateClientResponse>(user);
     }
