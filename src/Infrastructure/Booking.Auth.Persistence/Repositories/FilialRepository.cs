@@ -20,4 +20,14 @@ public class FilialRepository(DataContext context) : BaseRepository<Filial>(cont
             .AsNoTracking()
             .AnyAsync(x => x.Id != id && x.Name == name, cancellationToken);
     }
+
+    public async Task<List<Filial>> GetFilialsListAsync(int page, int pageSize, CancellationToken cancellationToken = default)
+    {
+        return await Context.Filials.Skip(page * pageSize).Take(pageSize).ToListAsync(cancellationToken);
+    }
+
+    public async Task DeleteFilialByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        await Context.Filials.Where(elm => elm.Id == id).ExecuteDeleteAsync(cancellationToken);
+    }
 }
