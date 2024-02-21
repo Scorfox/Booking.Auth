@@ -33,4 +33,14 @@ public class UserRepository(DataContext context) : BaseRepository<User>(context)
             .AsNoTracking()
             .AnyAsync(x => x.Id != id && x.Email.ToLower() == email, cancellationToken);
     }
+
+    public async Task<List<User>> GetUsersAsync(int page, int pageSize, CancellationToken token = default)
+    {
+        return await Context.Users.Skip(page*pageSize).Take(pageSize).ToListAsync(token);
+    }
+
+    public async Task DeleteUserAsync(Guid id, CancellationToken cancellationToken)
+    {
+        await Context.Users.Where(elm => elm.Id == id).ExecuteDeleteAsync(cancellationToken);
+    }
 }
