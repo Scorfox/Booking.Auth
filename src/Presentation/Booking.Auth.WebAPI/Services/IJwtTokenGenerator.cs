@@ -1,6 +1,10 @@
-﻿namespace Booking.Auth.WebAPI.Services;
+﻿using System.Security.Claims;
+
+namespace Booking.Auth.WebAPI.Services;
 
 public interface IJwtTokenGenerator
 {
-    string GenerateToken(string email, string? roleName);
+    string GenerateAccessToken(string email, string? roleName);
+    string GenerateRefreshToken();
+    ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
 }
