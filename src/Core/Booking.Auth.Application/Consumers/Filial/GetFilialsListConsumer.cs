@@ -1,0 +1,34 @@
+﻿using AutoMapper;
+using Booking.Auth.Application.Repositories;
+using MassTransit;
+using Otus.Booking.Common.Booking.Contracts.Filial.Requests;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Otus.Booking.Common.Booking.Contracts.Filial.Models;
+
+namespace Booking.Auth.Application.Consumers.Filial
+{
+    public class GetFilialsListConsumer:IConsumer<GetFilialsList>
+    {
+        private readonly IFilialRepository _filialRepository;
+        private readonly IMapper _mapper;
+
+        public GetFilialsListConsumer(IFilialRepository filialRepository, IMapper mapper)
+        {
+            _filialRepository = filialRepository;
+            _mapper = mapper;
+        }
+
+        public async Task Consume(ConsumeContext<GetFilialsList> context)
+        {
+            var request = context.Message;
+
+            var filials = await _filialRepository.GetFilialsListAsync(request.Page, request.PageSize);
+
+            await context.RespondAsync(filials.Select(elm=>_mapper.Map<FullFilialDto>(elm)));
+        }
+    }
+}
