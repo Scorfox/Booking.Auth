@@ -27,7 +27,7 @@ namespace Booking.Auth.Application.Consumers.Filial
         {
             var request = context.Message;
 
-            var filials = await _filialRepository.GetFilialsListAsync(request.Page, request.PageSize);
+            var filials = await _filialRepository.GetFilialsListAsync(request.PageNumber, request.PageSize);
 
             var result = new GetFilialsListResult
                 {Filials = filials.Select(elm => _mapper.Map<FullFilialDto>(elm)).ToList()};
