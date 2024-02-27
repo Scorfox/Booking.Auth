@@ -27,7 +27,7 @@ namespace Booking.Auth.Application.Consumers
 
             var user = await _userRepository.FindByIdAsync(false, request.Id);
 
-            await context.RespondAsync(_mapper.Map<GetUsersListResult>(user));
+            await context.RespondAsync(_mapper.Map<GetUserResult>(user));
         }
     }
 }

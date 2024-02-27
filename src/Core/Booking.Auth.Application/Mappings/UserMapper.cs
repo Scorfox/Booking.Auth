@@ -9,8 +9,7 @@ namespace Booking.Auth.Application.Mappings
         public UserMapper()
         {
             CreateMap<GetUserId, Domain.Entities.User>();
-            CreateMap<Domain.Entities.User, GetUsersListResult>();
+            CreateMap<Domain.Entities.User, GetUserResult>();
         }
     }
 }
-Т
