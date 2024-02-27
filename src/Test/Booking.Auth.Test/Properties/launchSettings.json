@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Booking.Business.Test": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

@@ -1,10 +1,15 @@
 ﻿using AutoMapper;
+using Otus.Booking.Common.Booking.Contracts.User.Requests;
+using Otus.Booking.Common.Booking.Contracts.User.Responses;
 
 namespace Booking.Auth.Application.Mappings
 {
     public sealed class UserMapper : Profile
     {
-        CreateMap<GetUser, Domain.Entities.User>();
-        CreateMap<Domain.Entities.User, GetUser>();
+        public UserMapper()
+        {
+            CreateMap<GetUserId, Domain.Entities.User>();
+            CreateMap<Domain.Entities.User, GetUsersListResult>();
+        }
     }
 }

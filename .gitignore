@@ -1,7 +1,19 @@
-/.idea/
+# Игнорировать файлы бинарных зависимостей NuGet
+*.dll
+*.exe
 
-# Visual Studio profiler
-*.psess
-*.vsp
-*.vspx
-*.sap
+# Игнорировать папку bin и obj
+bin/
+obj/
+
+# Игнорировать файлы конфигурации
+*.suo
+*.user
+*.cache
+
+# Игнорировать файлы развертывания
+#*.publishsettings
+
+# Игнорировать каталоги, создаваемые Visual Studio для решения и проектов
+.vscode/
+.vs/
