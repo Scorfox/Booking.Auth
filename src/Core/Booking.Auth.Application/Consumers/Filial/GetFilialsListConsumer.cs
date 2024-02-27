@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Otus.Booking.Common.Booking.Contracts.Filial.Models;
+using Otus.Booking.Common.Booking.Contracts.Filial.Responses;
 
 namespace Booking.Auth.Application.Consumers.Filial
 {
@@ -28,7 +29,10 @@ namespace Booking.Auth.Application.Consumers.Filial
 
             var filials = await _filialRepository.GetFilialsListAsync(request.Page, request.PageSize);
 
-            await context.RespondAsync(filials.Select(elm=>_mapper.Map<FullFilialDto>(elm)));
+            var result = new GetFilialsListResult
+                {Filials = filials.Select(elm => _mapper.Map<FullFilialDto>(elm)).ToList()};
+
+            await context.RespondAsync(result);
         }
     }
 }

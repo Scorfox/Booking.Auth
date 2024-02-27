@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Otus.Booking.Common.Booking.Contracts.Company.Models;
+using Otus.Booking.Common.Booking.Contracts.Company.Responses;
 
 namespace Booking.Auth.Application.Consumers.Company
 {
@@ -28,7 +29,8 @@ namespace Booking.Auth.Application.Consumers.Company
 
             var companies = await _companyRepository.GetAllCompaniesAsync(request.Page, request.PageSize);
 
-            await context.RespondAsync(companies.Select(elm => _mapper.Map<FullCompanyDto>(elm)));
+            await context.RespondAsync(new GetCompaniesListResult
+                {Companies = companies.Select(elm => _mapper.Map<FullCompanyDto>(elm)).ToList()});
         }
     }
 }

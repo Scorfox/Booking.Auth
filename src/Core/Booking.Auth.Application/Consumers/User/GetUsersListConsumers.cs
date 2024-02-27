@@ -4,6 +4,7 @@ using MassTransit;
 using MassTransit.Initializers;
 using Otus.Booking.Common.Booking.Contracts.User.Models;
 using Otus.Booking.Common.Booking.Contracts.User.Requests;
+using Otus.Booking.Common.Booking.Contracts.User.Responses;
 
 namespace Booking.Auth.Application.Consumers.User
 {
@@ -24,7 +25,8 @@ namespace Booking.Auth.Application.Consumers.User
 
             var users = await _userRepository.GetUsersAsync(request.Page, request.PageSize);
 
-            await context.RespondAsync(users.Select(elm => _mapper.Map<FullUserDto>(elm)));
+            await context.RespondAsync(new GetUsersListResult
+                {Users = users.Select(elm => _mapper.Map<FullUserDto>(elm)).ToList()});
         }
     }
 }
