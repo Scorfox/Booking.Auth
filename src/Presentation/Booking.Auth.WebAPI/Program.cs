@@ -83,14 +83,20 @@ builder.Services.AddMassTransit(x =>
     // User
     x.AddConsumer<CreateUserConsumer>();
     x.AddConsumer<UpdateUserConsumer>();
-    
+    x.AddConsumer<GetUsersListConsumers>();
+    x.AddConsumer<DeleteUserConsumer>();
+
     // Company
     x.AddConsumer<CreateCompanyConsumer>();
     x.AddConsumer<UpdateCompanyConsumer>();
+    x.AddConsumer<GetCompaniesListConsumer>();
+    x.AddConsumer<DeleteCompanyConsumer>();
     
     // Filial
     x.AddConsumer<CreateFilialConsumer>();
     x.AddConsumer<UpdateFilialConsumer>();
+    x.AddConsumer<DeleteFilialConsumer>();
+    x.AddConsumer<GetFilialsListConsumer>();
 });
 
 builder.Services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();
