@@ -1,3 +1,5 @@
+#define dds_tests
+
 using System.Text;
 using Booking.Auth.Application;
 using Booking.Auth.Application.Consumers.Company;
@@ -12,6 +14,7 @@ using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +58,18 @@ builder.Services.AddSwaggerGen(opt =>
 builder.Services.AddMassTransit(x =>
 {
     // Добавляем шину сообщений
+
+#if dds_tests
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(builder.Configuration["RabbitMQdds:Host"], h =>
+        {
+            h.Username(builder.Configuration["RabbitMQdds:Username"]);
+            h.Password(builder.Configuration["RabbitMQdds:Password"]);
+        });
+        cfg.ConfigureEndpoints(context);
+    });
+#else
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host(builder.Configuration["RabbitMQ:Host"], h =>
@@ -64,7 +79,7 @@ builder.Services.AddMassTransit(x =>
         });
         cfg.ConfigureEndpoints(context);
     });
-    
+#endif
     // User
     x.AddConsumer<CreateUserConsumer>();
     x.AddConsumer<UpdateUserConsumer>();

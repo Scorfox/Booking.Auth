@@ -27,7 +27,7 @@ namespace Booking.Auth.Application.Consumers.Company
         {
             var request = context.Message;
 
-            var companies = await _companyRepository.GetAllCompaniesAsync(request.Page, request.PageSize);
+            var companies = await _companyRepository.GetAllCompaniesAsync(request.Offset, request.Limit);
 
             await context.RespondAsync(new GetCompaniesListResult
                 {Companies = companies.Select(elm => _mapper.Map<FullCompanyDto>(elm)).ToList()});

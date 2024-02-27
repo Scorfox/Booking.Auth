@@ -34,9 +34,9 @@ public class UserRepository(DataContext context) : BaseRepository<User>(context)
             .AnyAsync(x => x.Id != id && x.Email.ToLower() == email, cancellationToken);
     }
 
-    public async Task<List<User>> GetUsersAsync(int page, int pageSize, CancellationToken token = default)
+    public async Task<List<User>> GetUsersAsync(int offset, int limit, CancellationToken token = default)
     {
-        return await Context.Users.Skip(page*pageSize).Take(pageSize).ToListAsync(token);
+        return await Context.Users.Skip(offset).Take(limit).ToListAsync(token);
     }
 
     public async Task DeleteUserAsync(Guid id, CancellationToken cancellationToken)

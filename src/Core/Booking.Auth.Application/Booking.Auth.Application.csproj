@@ -4,8 +4,8 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyVersion>1.0.0227.11646</AssemblyVersion>
-        <FileVersion>1.0.0227.11646</FileVersion>
+        <AssemblyVersion>1.0.0227.15007</AssemblyVersion>
+        <FileVersion>1.0.0227.15007</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,7 +17,7 @@
       <PackageReference Include="MediatR" Version="12.2.0" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.1" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
-      <PackageReference Include="Otus.Booking.Common" Version="0.0.0-g084202b508" />
+      <PackageReference Include="Otus.Booking.Common" Version="0.0.0-g797f572c4f" />
     </ItemGroup>
 
     <ItemGroup>

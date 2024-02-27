@@ -23,7 +23,7 @@ namespace Booking.Auth.Application.Consumers.User
         {
             var request = context.Message;
 
-            var users = await _userRepository.GetUsersAsync(request.Page, request.PageSize);
+            var users = await _userRepository.GetUsersAsync(request.Offset, request.Limit);
 
             await context.RespondAsync(new GetUsersListResult
                 {Users = users.Select(elm => _mapper.Map<FullUserDto>(elm)).ToList()});
