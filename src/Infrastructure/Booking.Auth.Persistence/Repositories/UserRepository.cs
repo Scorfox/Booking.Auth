@@ -2,6 +2,7 @@
 using Booking.Auth.Domain.Entities;
 using Booking.Auth.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
 
 namespace Booking.Auth.Persistence.Repositories;
 
@@ -25,5 +26,11 @@ public class UserRepository(DataContext context) : BaseRepository<User>(context)
     {
         return Context.Users
             .AnyAsync(x => x.Email == email, cancellationToken);
+    }
+
+    public Task<bool> HasAnyByIdAsync(Guid id, CancellationToken token = default)
+    {
+        return Context.Users
+            .AnyAsync(x => x.Id == id);
     }
 }

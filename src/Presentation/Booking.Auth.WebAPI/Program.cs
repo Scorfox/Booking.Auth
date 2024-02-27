@@ -1,10 +1,12 @@
 using System.Text;
 using Booking.Auth.Application;
+using Booking.Auth.Application.Consumers;
 using Booking.Auth.Persistence;
 using Booking.Auth.Persistence.Context;
 using Booking.Auth.WebAPI.Extensions;
 using Booking.Auth.WebAPI.Options;
 using Booking.Auth.WebAPI.Services;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -81,6 +83,21 @@ builder.Services.AddAuthorization(options =>
             authBuilder.RequireRole("Administrators");
         });
 
+});
+
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(builder.Configuration["RabbitMQ:Host"], h =>
+        {
+            h.Username(builder.Configuration["RabbitMQ:Username"]);
+            h.Password(builder.Configuration["RabbitMQ:Password"]);
+        });
+        cfg.ConfigureEndpoints(context);
+    }); 
+    
+    x.AddConsumer<GetUserConsumer>();
 });
 
 var app = builder.Build();
