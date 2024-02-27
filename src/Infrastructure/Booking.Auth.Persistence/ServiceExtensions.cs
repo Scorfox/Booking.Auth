@@ -1,4 +1,4 @@
-﻿#define dds_tests
+﻿//#define dds_tests
 
 using Booking.Auth.Application.Repositories;
 using Booking.Auth.Persistence.Context;

@@ -1,4 +1,4 @@
-#define dds_tests
+//#define dds_tests
 
 using System.Text;
 using Booking.Auth.Application;
