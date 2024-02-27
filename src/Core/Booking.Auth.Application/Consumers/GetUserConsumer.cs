@@ -25,7 +25,7 @@ namespace Booking.Auth.Application.Consumers
             if (!await _userRepository.HasAnyByIdAsync(request.Id, default))
                 throw new BadRequestException($"User with ID {request.Id} doesn't exists");
 
-            var user = _mapper.Map<Domain.Entities.User>(request.Id, default);
+            var user = await _userRepository.FindByIdAsync(false, request.Id);
 
             await context.RespondAsync(_mapper.Map<GetUsersListResult>(user));
         }

@@ -22,6 +22,20 @@ public class UserRepository(DataContext context) : BaseRepository<User>(context)
             .SingleOrDefaultAsync(x => x.Email == email, cancellationToken);
     }
 
+    public Task<User?> FindByIdAsync(bool useAsNoTracking, Guid id, CancellationToken token = default)
+    {
+        if (useAsNoTracking)
+            return Context.Users
+                .Include(e => e.Role)
+                .SingleOrDefaultAsync(x => x.Id == id);
+
+        return
+            Context.Users
+            .Include(e => e.Role)
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Id == id);
+    }
+
     public Task<bool> HasAnyByEmailAsync(string email, CancellationToken cancellationToken)
     {
         return Context.Users
