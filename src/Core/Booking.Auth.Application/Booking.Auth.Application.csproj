@@ -17,7 +17,7 @@
       <PackageReference Include="MediatR" Version="12.2.0" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.1" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
-      <PackageReference Include="Otus.Booking.Common" Version="0.0.0-g3ed9553600" />
+      <PackageReference Include="Otus.Booking.Common" Version="0.0.0-g5677e9face" />
     </ItemGroup>
 
     <ItemGroup>
