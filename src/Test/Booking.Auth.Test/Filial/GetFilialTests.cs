@@ -10,14 +10,14 @@ namespace Booking.Auth.Test.Filial
 {
     public class GetFilialTests : BaseTest
     {
-        private GetFilialIdConsumer Consumer { get; }
+        private GetFilialConsumer Consumer { get; }
 
         public GetFilialTests()
         {
             var config = new MapperConfiguration(cfg => cfg.AddProfile<FilialMapper>());
 
             var filialRepository = new FilialRepository(DataContext);
-            Consumer = new GetFilialIdConsumer(filialRepository, new Mapper(config));
+            Consumer = new GetFilialConsumer(filialRepository, new Mapper(config));
         }
 
         [Test]

@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace Booking.Auth.Application.Consumers.Filial
 {
-    public sealed class GetFilialIdConsumer : IConsumer<GetFilialId>
+    public sealed class GetFilialConsumer : IConsumer<GetFilialId>
     {
         private readonly IFilialRepository _filialRepository;
         private readonly IMapper _mapper;
 
-        public GetFilialIdConsumer(IFilialRepository filialRepository, IMapper mapper)
+        public GetFilialConsumer(IFilialRepository filialRepository, IMapper mapper)
         {
             _filialRepository = filialRepository;
             _mapper = mapper;
