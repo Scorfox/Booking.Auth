@@ -21,7 +21,7 @@ namespace Booking.Auth.Test.Filial
         }
 
         [Test]
-        public async Task GetCompanyByIdTest_ReturnsSuccess()
+        public async Task GetFilialByIdTest_ReturnsSuccess()
         {
             // Arrange
             var testHarness = new InMemoryTestHarness();
