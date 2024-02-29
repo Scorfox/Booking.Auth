@@ -10,11 +10,11 @@ using Otus.Booking.Common.Booking.Contracts.Company.Requests;
 
 namespace Booking.Auth.Test.Company
 {
-    public class GetCompanyByIdTest : BaseTest
+    public class GetCompanyTest : BaseTest
     {
         private GetCompanyConsumer Consumer { get; }
 
-        public GetCompanyByIdTest()
+        public GetCompanyTest()
         {
             var config = new MapperConfiguration(cfg => cfg.AddProfile<CompanyMapper>());
 
