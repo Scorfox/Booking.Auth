@@ -19,6 +19,6 @@ public sealed class CompanyMapper : Profile
         CreateMap<Domain.Entities.Company, FullCompanyDto>();
 
         CreateMap<GetCompanieId, Domain.Entities.Company>();
-        CreateMap<Domain.Entities.Company, GetCompanyResult>();
+        CreateMap<Domain.Entities.Company, FullCompanyDto>();
     }
 }

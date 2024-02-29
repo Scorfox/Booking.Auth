@@ -12,14 +12,14 @@ namespace Booking.Auth.Test.Company
 {
     public class GetCompanyByIdTest : BaseTest
     {
-        private GetCompanyIdConsumer Consumer { get; }
+        private GetCompanyConsumer Consumer { get; }
 
         public GetCompanyByIdTest()
         {
             var config = new MapperConfiguration(cfg => cfg.AddProfile<CompanyMapper>());
 
             var companyRepository = new CompanyRepository(DataContext);
-            Consumer = new GetCompanyIdConsumer(companyRepository, new Mapper(config));
+            Consumer = new GetCompanyConsumer(companyRepository, new Mapper(config));
         }
 
         [Test]

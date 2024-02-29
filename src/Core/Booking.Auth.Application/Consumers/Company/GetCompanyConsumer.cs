@@ -9,12 +9,12 @@ using Booking.Auth.Application.Exceptions;
 
 namespace Booking.Auth.Application.Consumers.Company
 {
-    public class GetCompanyIdConsumer : IConsumer<GetCompanieId>
+    public class GetCompanyConsumer : IConsumer<GetCompanieId>
     {
         private readonly ICompanyRepository _companyRepository;
         private readonly IMapper _mapper;
 
-        public GetCompanyIdConsumer(ICompanyRepository companyRepository, IMapper mapper)
+        public GetCompanyConsumer(ICompanyRepository companyRepository, IMapper mapper)
         {
             _companyRepository = companyRepository;
             _mapper = mapper;
@@ -23,7 +23,7 @@ namespace Booking.Auth.Application.Consumers.Company
         {
             var request = context.Message;
 
-            if (!await _companyRepository.HasAnyWithIdAsync(request.Id))
+            if (!await _companyRepository.HasAnyByIdAsync(request.Id))
                 throw new BadRequestException($"Company with ID {request.Id} doesn't exists");
 
             await context.RespondAsync(_companyRepository.FindByIdAsync(request.Id, default));
