@@ -26,7 +26,7 @@ namespace Booking.Auth.Application.Consumers.Filial
         {
             var request = context.Message;
 
-            if (!await _filialRepository.HasAnyWithIdAsync(request.Id))
+            if (!await _filialRepository.HasAnyByIdAsync(request.Id))
                 throw new BadRequestException($"Filail with ID {request.Id} doesn't exists");
 
             await context.RespondAsync(_filialRepository.FindByIdAsync(request.Id, default));

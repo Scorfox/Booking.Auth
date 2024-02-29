@@ -7,13 +7,6 @@ namespace Booking.Auth.Persistence.Repositories;
 
 public class FilialRepository(DataContext context) : BaseRepository<Filial>(context), IFilialRepository
 {
-    public async Task<bool> HasAnyWithIdAsync(Guid id, CancellationToken cancellationToken = default)
-    {
-        return await Context.Companies
-            .AsNoTracking()
-            .AnyAsync(x => x.Id == id, cancellationToken);
-    }
-
     public async Task<bool> HasAnyWithNameAsync(string name, CancellationToken cancellationToken = default)
     {
         return await Context.Filials

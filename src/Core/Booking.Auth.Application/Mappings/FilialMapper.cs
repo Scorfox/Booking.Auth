@@ -19,6 +19,6 @@ public sealed class FilialMapper : Profile
         CreateMap<Domain.Entities.Filial, FullFilialDto>();
 
         CreateMap<GetFilialId, Domain.Entities.Filial>();
-        CreateMap<Domain.Entities.Filial, GetFilialResult>();
+        CreateMap<Domain.Entities.Filial, FullFilialDto>();
     }
 }
