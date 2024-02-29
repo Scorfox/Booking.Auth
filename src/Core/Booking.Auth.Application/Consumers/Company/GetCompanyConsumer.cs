@@ -9,7 +9,7 @@ using Booking.Auth.Application.Exceptions;
 
 namespace Booking.Auth.Application.Consumers.Company
 {
-    public class GetCompanyConsumer : IConsumer<GetCompanieId>
+    public class GetCompanyConsumer : IConsumer<GetCompanyId>
     {
         private readonly ICompanyRepository _companyRepository;
         private readonly IMapper _mapper;
@@ -19,7 +19,7 @@ namespace Booking.Auth.Application.Consumers.Company
             _companyRepository = companyRepository;
             _mapper = mapper;
         }
-        public async Task Consume(ConsumeContext<GetCompanieId> context)
+        public async Task Consume(ConsumeContext<GetCompanyId> context)
         {
             var request = context.Message;
 
