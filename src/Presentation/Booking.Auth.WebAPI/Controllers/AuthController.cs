@@ -25,7 +25,16 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<TokenDto>> Login(AuthenticateRequest request,
         CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request, cancellationToken);
-        return response.success ? Ok(_jwtTokenGenerator.GenerateToken(request.Email, response.roleName)) : Unauthorized();
+        var result = await _mediator.Send(request, cancellationToken);
+        if (result.success)
+        {
+            var response = new AuthenticateResponse()
+            {
+                AccessToken = _jwtTokenGenerator.GenerateAccessToken(request.Email, result.roleName),
+                RefreshToken = _jwtTokenGenerator.GenerateRefreshToken()
+            };
+            return Ok(response);
+        }
+        return Unauthorized();
     }
 }
