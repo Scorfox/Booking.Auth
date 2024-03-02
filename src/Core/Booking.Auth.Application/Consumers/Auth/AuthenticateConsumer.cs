@@ -1,9 +1,9 @@
-﻿using Booking.Auth.Application.Exceptions;
-using Booking.Auth.Application.Repositories;
+﻿using Booking.Auth.Application.Repositories;
 using Booking.Auth.WebAPI.Services;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Otus.Booking.Common.Booking.Contracts.Auth.Requests;
+using Otus.Booking.Common.Booking.Exceptions;
 using AuthenticateResult = Otus.Booking.Common.Booking.Contracts.Auth.Responses.AuthenticateResult;
 
 namespace Booking.Auth.Application.Consumers.Auth;

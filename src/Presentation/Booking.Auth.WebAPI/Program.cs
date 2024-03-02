@@ -105,7 +105,6 @@ dataContext?.Database.EnsureCreated();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-app.UseErrorHandler();
 app.UseCors();
 app.MapControllers();
 app.UseAuthentication();

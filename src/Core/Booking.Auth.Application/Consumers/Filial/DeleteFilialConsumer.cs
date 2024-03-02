@@ -3,25 +3,23 @@ using MassTransit;
 using Otus.Booking.Common.Booking.Contracts.Filial.Requests;
 using Otus.Booking.Common.Booking.Contracts.Filial.Responses;
 
-namespace Booking.Auth.Application.Consumers.Filial
+namespace Booking.Auth.Application.Consumers.Filial;
+
+public class DeleteFilialConsumer:IConsumer<DeleteFilial>
 {
-    public class DeleteFilialConsumer:IConsumer<DeleteFilial>
+    private readonly IFilialRepository _filialRepository;
+
+    public DeleteFilialConsumer(IFilialRepository filialRepository)
     {
-        private readonly IFilialRepository _filialRepository;
+        _filialRepository = filialRepository;
+    }
 
-        public DeleteFilialConsumer(IFilialRepository filialRepository)
-        {
-            _filialRepository = filialRepository;
-        }
+    public async Task Consume(ConsumeContext<DeleteFilial> context)
+    {
+        var request = context.Message;
 
-        public async Task Consume(ConsumeContext<DeleteFilial> context)
-        {
-            var request = context.Message;
+        await _filialRepository.DeleteFilialByIdAsync(request.Id);
 
-
-            await _filialRepository.DeleteFilialByIdAsync(request.Id);
-
-            await context.RespondAsync(new DeleteFilialResult());
-        }
+        await context.RespondAsync(new DeleteFilialResult());
     }
 }
