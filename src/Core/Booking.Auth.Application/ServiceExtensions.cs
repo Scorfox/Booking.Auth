@@ -1,11 +1,9 @@
 ﻿using System.Reflection;
 using System.Text;
-using Booking.Auth.Application.Common.Behaviors;
 using Booking.Auth.Application.Infrastructure;
 using Booking.Auth.Application.Services;
 using Booking.Auth.WebAPI.Services;
 using FluentValidation;
-using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +18,6 @@ public static class ServiceExtensions
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         var jwtOptions = configuration.GetSection(JwtOptions.Key).Get<JwtOptions>()!;
 
         services.AddAuthentication(options =>

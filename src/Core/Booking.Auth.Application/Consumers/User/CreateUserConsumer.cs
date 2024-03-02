@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Booking.Auth.Application.Exceptions;
 using Booking.Auth.Application.Repositories;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Otus.Booking.Common.Booking.Contracts.User.Requests;
 using Otus.Booking.Common.Booking.Contracts.User.Responses;
+using Otus.Booking.Common.Booking.Exceptions;
 
 namespace Booking.Auth.Application.Consumers.User;
 

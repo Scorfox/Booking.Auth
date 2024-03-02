@@ -19,7 +19,7 @@
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.1" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
       <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.4.0" />
-      <PackageReference Include="Otus.Booking.Common" Version="0.0.0-g97a8280474" />
+      <PackageReference Include="Otus.Booking.Common" Version="0.0.0-g028532d68f" />
     </ItemGroup>
 
     <ItemGroup>
