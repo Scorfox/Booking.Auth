@@ -1,4 +1,4 @@
-﻿namespace Booking.Auth.WebAPI.Options;
+﻿namespace Booking.Auth.Application.Infrastructure;
 
 public class JwtOptions
 {

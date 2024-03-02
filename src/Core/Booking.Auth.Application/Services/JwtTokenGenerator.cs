@@ -1,12 +1,13 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Booking.Auth.WebAPI.Options;
+using Booking.Auth.Application.Infrastructure;
+using Booking.Auth.WebAPI.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
-namespace Booking.Auth.WebAPI.Services;
+namespace Booking.Auth.Application.Services;
 
 public class JwtTokenGenerator : IJwtTokenGenerator
 {

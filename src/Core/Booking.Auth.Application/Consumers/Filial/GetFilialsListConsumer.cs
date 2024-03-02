@@ -2,37 +2,31 @@
 using Booking.Auth.Application.Repositories;
 using MassTransit;
 using Otus.Booking.Common.Booking.Contracts.Filial.Requests;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Otus.Booking.Common.Booking.Contracts.Filial.Models;
 using Otus.Booking.Common.Booking.Contracts.Filial.Responses;
 
-namespace Booking.Auth.Application.Consumers.Filial
+namespace Booking.Auth.Application.Consumers.Filial;
+
+public class GetFilialsListConsumer:IConsumer<GetFilialsList>
 {
-    public class GetFilialsListConsumer:IConsumer<GetFilialsList>
+    private readonly IFilialRepository _filialRepository;
+    private readonly IMapper _mapper;
+
+    public GetFilialsListConsumer(IFilialRepository filialRepository, IMapper mapper)
     {
-        private readonly IFilialRepository _filialRepository;
-        private readonly IMapper _mapper;
+        _filialRepository = filialRepository;
+        _mapper = mapper;
+    }
 
-        public GetFilialsListConsumer(IFilialRepository filialRepository, IMapper mapper)
+    public async Task Consume(ConsumeContext<GetFilialsList> context)
+    {
+        var request = context.Message;
+
+        var filials = await _filialRepository.GetFilialsListAsync(request.Offset, request.Limit);
+
+        await context.RespondAsync(new GetFilialsListResult
         {
-            _filialRepository = filialRepository;
-            _mapper = mapper;
-        }
-
-        public async Task Consume(ConsumeContext<GetFilialsList> context)
-        {
-            var request = context.Message;
-
-            var filials = await _filialRepository.GetFilialsListAsync(request.Offset, request.Limit);
-
-            var result = new GetFilialsListResult
-                {Filials = filials.Select(elm => _mapper.Map<FullFilialDto>(elm)).ToList()};
-
-            await context.RespondAsync(result);
-        }
+            Filials = _mapper.Map<List<FullFilialDto>>(filials)
+        });
     }
 }
