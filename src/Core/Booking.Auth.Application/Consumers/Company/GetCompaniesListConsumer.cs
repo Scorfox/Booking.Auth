@@ -2,35 +2,31 @@
 using Booking.Auth.Application.Repositories;
 using MassTransit;
 using Otus.Booking.Common.Booking.Contracts.Company.Requests;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Otus.Booking.Common.Booking.Contracts.Company.Models;
 using Otus.Booking.Common.Booking.Contracts.Company.Responses;
 
-namespace Booking.Auth.Application.Consumers.Company
+namespace Booking.Auth.Application.Consumers.Company;
+
+public class GetCompaniesListConsumer:IConsumer<GetCompaniesList>
 {
-    public class GetCompaniesListConsumer:IConsumer<GetCompaniesList>
+    private readonly ICompanyRepository _companyRepository;
+    private readonly IMapper _mapper;
+
+    public GetCompaniesListConsumer(ICompanyRepository companyRepository, IMapper mapper)
     {
-        private readonly ICompanyRepository _companyRepository;
-        private readonly IMapper _mapper;
+        _companyRepository = companyRepository;
+        _mapper = mapper;
+    }
 
-        public GetCompaniesListConsumer(ICompanyRepository companyRepository, IMapper mapper)
+    public async Task Consume(ConsumeContext<GetCompaniesList> context)
+    {
+        var request = context.Message;
+
+        var companies = await _companyRepository.GetAllCompaniesAsync(request.Offset, request.Limit);
+
+        await context.RespondAsync(new GetCompaniesListResult
         {
-            _companyRepository = companyRepository;
-            _mapper = mapper;
-        }
-
-        public async Task Consume(ConsumeContext<GetCompaniesList> context)
-        {
-            var request = context.Message;
-
-            var companies = await _companyRepository.GetAllCompaniesAsync(request.Offset, request.Limit);
-
-            await context.RespondAsync(new GetCompaniesListResult
-                {Companies = companies.Select(elm => _mapper.Map<FullCompanyDto>(elm)).ToList()});
-        }
+            Companies = _mapper.Map<List<FullCompanyDto>>(companies)
+        });
     }
 }
