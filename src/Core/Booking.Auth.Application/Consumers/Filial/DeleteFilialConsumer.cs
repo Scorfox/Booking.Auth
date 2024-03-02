@@ -1,7 +1,5 @@
 ﻿using Booking.Auth.Application.Repositories;
 using MassTransit;
-using Otus.Booking.Common.Booking.Contracts.Company.Requests;
-using Otus.Booking.Common.Booking.Contracts.Company.Responses;
 using Otus.Booking.Common.Booking.Contracts.Filial.Requests;
 using Otus.Booking.Common.Booking.Contracts.Filial.Responses;
 

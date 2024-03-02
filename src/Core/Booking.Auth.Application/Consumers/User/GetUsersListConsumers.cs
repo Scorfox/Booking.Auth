@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Booking.Auth.Application.Repositories;
 using MassTransit;
-using MassTransit.Initializers;
 using Otus.Booking.Common.Booking.Contracts.User.Models;
 using Otus.Booking.Common.Booking.Contracts.User.Requests;
 using Otus.Booking.Common.Booking.Contracts.User.Responses;

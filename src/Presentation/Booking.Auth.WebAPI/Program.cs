@@ -1,32 +1,27 @@
 //#define dds_tests
-
-using System.Text;
 using Booking.Auth.Application;
+using Booking.Auth.Application.Consumers.Auth;
 using Booking.Auth.Application.Consumers.Company;
 using Booking.Auth.Application.Consumers.Filial;
 using Booking.Auth.Application.Consumers.User;
 using Booking.Auth.Persistence;
 using Booking.Auth.Persistence.Context;
 using Booking.Auth.WebAPI.Extensions;
-using Booking.Auth.WebAPI.Options;
-using Booking.Auth.WebAPI.Services;
 using MassTransit;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.ConfigurePersistence(builder.Configuration);
-builder.Services.ConfigureApplication();
+builder.Services.ConfigureApplication(builder.Configuration);
+builder.Services.AddConfigurations(builder.Configuration);
 
 builder.Services.ConfigureApiBehavior();
 builder.Services.ConfigureCorsPolicy();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddSwaggerGen(opt =>
 {
     opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
@@ -97,41 +92,9 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<UpdateFilialConsumer>();
     x.AddConsumer<DeleteFilialConsumer>();
     x.AddConsumer<GetFilialsListConsumer>();
-});
-
-builder.Services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();
-
-builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptions.Key));
-
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(o =>
-{
-    o.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey
-            (Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"])),
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = false,
-        ValidateIssuerSigningKey = true
-    };
-});
-
-builder.Services.AddAuthorization(options =>
-{
-
-    options.AddPolicy("SuperAdmin",
-        authBuilder =>
-        {
-            authBuilder.RequireRole("Administrators");
-        });
-
+    
+    // Auth
+    x.AddConsumer<AuthenticateConsumer>();
 });
 
 var app = builder.Build();

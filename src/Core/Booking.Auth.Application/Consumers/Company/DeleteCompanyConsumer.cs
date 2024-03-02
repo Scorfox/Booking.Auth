@@ -1,10 +1,7 @@
-﻿using AutoMapper;
-using Booking.Auth.Application.Exceptions;
-using Booking.Auth.Application.Repositories;
+﻿using Booking.Auth.Application.Repositories;
 using MassTransit;
 using Otus.Booking.Common.Booking.Contracts.Company.Requests;
 using Otus.Booking.Common.Booking.Contracts.Company.Responses;
-
 
 namespace Booking.Auth.Application.Consumers.Company
 {
