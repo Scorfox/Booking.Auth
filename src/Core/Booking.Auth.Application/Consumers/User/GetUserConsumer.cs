@@ -22,7 +22,7 @@ namespace Booking.Auth.Application.Consumers.User
             var request = context.Message;
 
             if (!await _userRepository.HasAnyByIdAsync(request.Id))
-                throw new BadRequestException($"User with ID {request.Id} doesn't exists");
+                throw new NotFoundException($"User with ID {request.Id} doesn't exists");
 
             await context.RespondAsync(_userRepository.FindByIdAsync(request.Id, default));
         }
