@@ -2,7 +2,7 @@
 using Otus.Booking.Common.Booking.Contracts.Company.Requests;
 using AutoMapper;
 using Booking.Auth.Application.Repositories;
-using Booking.Auth.Application.Exceptions;
+using Otus.Booking.Common.Booking.Exceptions;
 
 namespace Booking.Auth.Application.Consumers.Company
 {
