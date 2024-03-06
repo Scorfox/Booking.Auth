@@ -41,7 +41,7 @@ namespace Booking.Auth.Test.Filial
 
             var request = Fixture.Create<GetFilialsList>();
             request.Offset = 0;
-            request.Limit = 3;
+            request.Count = 3;
             // Act
             await testHarness.InputQueueSendEndpoint.Send(request);
             var result = testHarness.Published.Select<GetFilialsListResult>().FirstOrDefault()?.Context.Message;
@@ -51,7 +51,7 @@ namespace Booking.Auth.Test.Filial
                 Assert.That(testHarness.Consumed.Select<GetFilialsList>().Any(), Is.True);
                 Assert.That(consumerHarness.Consumed.Select<GetFilialsList>().Any(), Is.True);
                 Assert.That(result, Is.Not.Null);
-                Assert.That(result.Filials.Count, Is.EqualTo(3));
+                Assert.That(result.Elements.Count, Is.EqualTo(3));
             });
 
             await testHarness.Stop();

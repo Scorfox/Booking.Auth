@@ -22,11 +22,11 @@ public class GetCompaniesListConsumer:IConsumer<GetCompaniesList>
     {
         var request = context.Message;
 
-        var companies = await _companyRepository.GetAllCompaniesAsync(request.Offset, request.Limit);
+        var companies = await _companyRepository.GetAllCompaniesAsync(request.Offset, request.Count);
 
         await context.RespondAsync(new GetCompaniesListResult
         {
-            Companies = _mapper.Map<List<FullCompanyDto>>(companies)
+            Elements = _mapper.Map<List<FullCompanyDto>>(companies.Item1), TotalCount = companies.Item2
         });
     }
 }

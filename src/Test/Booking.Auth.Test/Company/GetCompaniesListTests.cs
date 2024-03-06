@@ -41,7 +41,7 @@ namespace Booking.Auth.Test.Company
 
             var request = Fixture.Create<GetCompaniesList>();
             request.Offset = 0;
-            request.Limit = 3;
+            request.Count = 3;
             // Act
             await testHarness.InputQueueSendEndpoint.Send(request);
             var result = testHarness.Published.Select<GetCompaniesListResult>().FirstOrDefault()?.Context.Message;
@@ -51,7 +51,7 @@ namespace Booking.Auth.Test.Company
                 Assert.That(testHarness.Consumed.Select<GetCompaniesList>().Any(), Is.True);
                 Assert.That(consumerHarness.Consumed.Select<GetCompaniesList>().Any(), Is.True);
                 Assert.That(result, Is.Not.Null);
-                Assert.That(result.Companies.Count,Is.EqualTo(3));
+                Assert.That(result.Elements.Count,Is.EqualTo(3));
             });
 
             await testHarness.Stop();
