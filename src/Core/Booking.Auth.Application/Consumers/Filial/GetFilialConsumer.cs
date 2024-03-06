@@ -2,6 +2,7 @@
 using Booking.Auth.Application.Repositories;
 using MassTransit;
 using Otus.Booking.Common.Booking.Contracts.Filial.Requests;
+using Otus.Booking.Common.Booking.Contracts.Filial.Responses;
 using Otus.Booking.Common.Booking.Exceptions;
 
 namespace Booking.Auth.Application.Consumers.Filial
@@ -20,10 +21,12 @@ namespace Booking.Auth.Application.Consumers.Filial
         {
             var request = context.Message;
 
-            if (!await _filialRepository.HasAnyByIdAsync(request.Id))
+            var filial = _filialRepository.FindByIdAsync(request.Id);
+
+            if (filial == null)
                 throw new NotFoundException($"Filial with ID {request.Id} doesn't exists");
 
-            await context.RespondAsync(_filialRepository.FindByIdAsync(request.Id, default));
+            await context.RespondAsync(_mapper.Map<GetFilialResult>(filial));
         }
     }
 }
