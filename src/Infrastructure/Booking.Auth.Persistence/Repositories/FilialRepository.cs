@@ -21,10 +21,12 @@ public class FilialRepository(DataContext context) : BaseRepository<Filial>(cont
             .AnyAsync(x => x.Id != id && x.Name == name, cancellationToken);
     }
 
-    public async Task<Tuple<List<Filial>, int>> GetFilialsListAsync(int offset, int limit, CancellationToken cancellationToken = default)
-    {
-        return new Tuple<List<Filial>, int>(await Context.Filials.Skip(offset).Take(limit).ToListAsync(cancellationToken), await Context.Filials.CountAsync(cancellationToken));
-    }
+    public async Task<List<Filial>> GetFilialsListAsync(int offset, int limit,
+        CancellationToken cancellationToken = default)
+        => await base.GetPaginatedListAsync(offset, limit, cancellationToken);
+
+    public async Task<int> GetFilialsTotalCount(CancellationToken token = default)
+        => await base.GetTotalCount(token);
 
     public async Task DeleteFilialByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {

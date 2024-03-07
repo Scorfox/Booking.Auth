@@ -6,6 +6,7 @@ public interface IFilialRepository : IBaseRepository<Filial>
 { 
     Task<bool> HasAnyWithNameAsync(string inn, CancellationToken cancellationToken = default);
     Task<bool> HasAnyWithNameExceptIdAsync(Guid id, string inn, CancellationToken cancellationToken = default);
-    Task<Tuple<List<Filial>, int>> GetFilialsListAsync(int offset, int limit, CancellationToken cancellationToken = default);
+    Task<List<Filial>> GetFilialsListAsync(int offset, int limit, CancellationToken cancellationToken = default);
+    Task<int> GetFilialsTotalCount(CancellationToken token = default);
     Task DeleteFilialByIdAsync(Guid id, CancellationToken cancellationToken = default);
 }

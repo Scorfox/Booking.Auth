@@ -52,6 +52,7 @@ public class UpdateFilialTests : BaseTest
             Assert.That(consumerHarness.Consumed.Select<UpdateFilial>().Any(), Is.True);
             Assert.That(filial.Name, Is.EqualTo(result?.Name));
         });
+
         
         await testHarness.Stop();
     }

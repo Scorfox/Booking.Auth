@@ -23,10 +23,11 @@ public class GetCompaniesListConsumer:IConsumer<GetCompaniesList>
         var request = context.Message;
 
         var companies = await _companyRepository.GetAllCompaniesAsync(request.Offset, request.Count);
+        var totalCount = await _companyRepository.GetCompaniesTotalCountAsync();
 
         await context.RespondAsync(new GetCompaniesListResult
         {
-            Elements = _mapper.Map<List<FullCompanyDto>>(companies.Item1), TotalCount = companies.Item2
+            Elements = companies.Select(elm=>_mapper.Map<FullCompanyDto>(elm)).ToList(), TotalCount = totalCount
         });
     }
 }
