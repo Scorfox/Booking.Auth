@@ -28,7 +28,7 @@ namespace Booking.Auth.Test.Filial
             var consumerHarness = testHarness.Consumer(() => Consumer);
             Guid id = Guid.NewGuid();
 
-            var request = Fixture.Create<GetFilialId>();
+            var request = Fixture.Create<GetFilialById>();
             request.Id = id;
 
             await testHarness.Start();
@@ -39,8 +39,8 @@ namespace Booking.Auth.Test.Filial
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.That(testHarness.Consumed.Select<GetFilialId>().Any(), Is.True);
-                Assert.That(consumerHarness.Consumed.Select<GetFilialId>().Any(), Is.True);
+                Assert.That(testHarness.Consumed.Select<GetFilialById>().Any(), Is.True);
+                Assert.That(consumerHarness.Consumed.Select<GetFilialById>().Any(), Is.True);
             });
 
             await testHarness.Stop();

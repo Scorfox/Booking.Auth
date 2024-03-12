@@ -1,12 +1,13 @@
-﻿using MassTransit;
-using Otus.Booking.Common.Booking.Contracts.Company.Requests;
-using AutoMapper;
+﻿using AutoMapper;
 using Booking.Auth.Application.Repositories;
+using MassTransit;
+using Otus.Booking.Common.Booking.Contracts.Company.Requests;
+using Otus.Booking.Common.Booking.Contracts.Company.Responses;
 using Otus.Booking.Common.Booking.Exceptions;
 
 namespace Booking.Auth.Application.Consumers.Company
 {
-    public class GetCompanyConsumer : IConsumer<GetCompanyId>
+    public class GetCompanyConsumer : IConsumer<GetCompanyById>
     {
         private readonly ICompanyRepository _companyRepository;
         private readonly IMapper _mapper;
@@ -16,14 +17,17 @@ namespace Booking.Auth.Application.Consumers.Company
             _companyRepository = companyRepository;
             _mapper = mapper;
         }
-        public async Task Consume(ConsumeContext<GetCompanyId> context)
+        
+        public async Task Consume(ConsumeContext<GetCompanyById> context)
         {
             var request = context.Message;
 
-            if (!await _companyRepository.HasAnyByIdAsync(request.Id))
+            var company = await _companyRepository.FindByIdAsync(request.Id);
+
+            if (company == null) 
                 throw new NotFoundException($"Company with ID {request.Id} doesn't exists");
 
-            await context.RespondAsync(_companyRepository.FindByIdAsync(request.Id, default));
+            await context.RespondAsync(_mapper.Map<GetCompanyResult>(company));
         }
     }
 }

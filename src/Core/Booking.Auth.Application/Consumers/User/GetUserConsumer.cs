@@ -2,11 +2,12 @@
 using Booking.Auth.Application.Repositories;
 using MassTransit;
 using Otus.Booking.Common.Booking.Contracts.User.Requests;
+using Otus.Booking.Common.Booking.Contracts.User.Responses;
 using Otus.Booking.Common.Booking.Exceptions;
 
 namespace Booking.Auth.Application.Consumers.User
 {
-    public sealed class GetUserConsumer : IConsumer<GetUserId>
+    public sealed class GetUserConsumer : IConsumer<GetUserById>
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
@@ -17,14 +18,16 @@ namespace Booking.Auth.Application.Consumers.User
             _mapper = mapper;
         }
 
-        public async Task Consume(ConsumeContext<GetUserId> context)
+        public async Task Consume(ConsumeContext<GetUserById> context)
         {
             var request = context.Message;
 
-            if (!await _userRepository.HasAnyByIdAsync(request.Id))
+            var user = await _userRepository.FindByIdAsync(request.Id);
+
+            if (user == null)
                 throw new NotFoundException($"User with ID {request.Id} doesn't exists");
 
-            await context.RespondAsync(_userRepository.FindByIdAsync(request.Id, default));
+            await context.RespondAsync(_mapper.Map<GetUserResult>(user));
         }
     }
 }
