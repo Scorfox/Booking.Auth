@@ -22,8 +22,8 @@ public class GetCompaniesListConsumer:IConsumer<GetCompaniesList>
     {
         var request = context.Message;
 
-        var companies = await _companyRepository.GetAllCompaniesAsync(request.Offset, request.Count);
-        var totalCount = await _companyRepository.GetCompaniesTotalCountAsync();
+        var companies = await _companyRepository.GetPaginatedListAsync(request.Offset, request.Count);
+        var totalCount = await _companyRepository.GetTotalCount();
 
         await context.RespondAsync(new GetCompaniesListResult
         {

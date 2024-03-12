@@ -22,8 +22,8 @@ public class GetFilialsListConsumer:IConsumer<GetFilialsList>
     {
         var request = context.Message;
 
-        var filials = await _filialRepository.GetFilialsListAsync(request.Offset, request.Count);
-        var totalFilials = await _filialRepository.GetFilialsTotalCount();
+        var filials = await _filialRepository.GetPaginatedListAsync(request.Offset, request.Count);
+        var totalFilials = await _filialRepository.GetTotalCount();
 
         await context.RespondAsync(new GetFilialsListResult
         {

@@ -22,8 +22,8 @@ public class GetUsersListConsumers:IConsumer<GetUsersList>
     {
         var request = context.Message;
 
-        var users = await _userRepository.GetUsersAsync(request.Offset, request.Count);
-        var totalCount = await _userRepository.GetUsersTotalCount();
+        var users = await _userRepository.GetPaginatedListAsync(request.Offset, request.Count);
+        var totalCount = await _userRepository.GetTotalCount();
 
         await context.RespondAsync(new GetUsersListResult
         {
