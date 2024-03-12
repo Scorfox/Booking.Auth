@@ -30,7 +30,7 @@ namespace Booking.Auth.Test.Company
             var consumerHarness = testHarness.Consumer(() => Consumer);
             Guid id = Guid.NewGuid();
 
-            var request = Fixture.Create<GetCompanyId>();
+            var request = Fixture.Create<GetCompanyById>();
             request.Id = id;
 
             await testHarness.Start();
@@ -41,8 +41,8 @@ namespace Booking.Auth.Test.Company
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.That(testHarness.Consumed.Select<GetCompanyId>().Any(), Is.True);
-                Assert.That(consumerHarness.Consumed.Select<GetCompanyId>().Any(), Is.True);
+                Assert.That(testHarness.Consumed.Select<GetCompanyById>().Any(), Is.True);
+                Assert.That(consumerHarness.Consumed.Select<GetCompanyById>().Any(), Is.True);
             });
 
             await testHarness.Stop();

@@ -24,7 +24,6 @@ public sealed class UserMapper : Profile
         CreateMap<Domain.Entities.User, UpdateUserResult>()
             .ForMember(d => d.Email, s => s.MapFrom(e => e.Email.ToLower()));
 
-        CreateMap<GetUserById, Domain.Entities.User>();
         CreateMap<Domain.Entities.User, GetUserResult>();
     }
 }

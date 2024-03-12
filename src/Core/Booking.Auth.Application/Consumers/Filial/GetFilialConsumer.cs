@@ -17,11 +17,12 @@ namespace Booking.Auth.Application.Consumers.Filial
             _filialRepository = filialRepository;
             _mapper = mapper;
         }
+        
         public async Task Consume(ConsumeContext<GetFilialById> context)
         {
             var request = context.Message;
 
-            var filial = _filialRepository.FindByIdAsync(request.Id);
+            var filial = await _filialRepository.FindByIdAsync(request.Id);
 
             if (filial == null)
                 throw new NotFoundException($"Filial with ID {request.Id} doesn't exists");

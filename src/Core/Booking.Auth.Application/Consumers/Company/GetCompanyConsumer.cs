@@ -17,11 +17,12 @@ namespace Booking.Auth.Application.Consumers.Company
             _companyRepository = companyRepository;
             _mapper = mapper;
         }
+        
         public async Task Consume(ConsumeContext<GetCompanyById> context)
         {
             var request = context.Message;
 
-            var company = _companyRepository.FindByIdAsync(request.Id);
+            var company = await _companyRepository.FindByIdAsync(request.Id);
 
             if (company == null) 
                 throw new NotFoundException($"Company with ID {request.Id} doesn't exists");
