@@ -34,7 +34,7 @@ public class UpdateUserTests : BaseTest
         request.Id = user.Id;
         
         var testHarness = new InMemoryTestHarness();
-        var consumerHarness = testHarness.Consumer(() => Consumer);
+        testHarness.Consumer(() => Consumer);
         
         await testHarness.Start(); 
         
@@ -46,7 +46,7 @@ public class UpdateUserTests : BaseTest
         Assert.Multiple(() =>
         {
             Assert.That(testHarness.Consumed.Select<UpdateUser>().Any(), Is.True);
-            Assert.That(consumerHarness.Consumed.Select<UpdateUser>().Any(), Is.True);
+            Assert.That(testHarness.Published.Select<UpdateUserResult>().Any(), Is.True);
             Assert.That(user.LastName, Is.EqualTo(result?.LastName));
         });
         
@@ -58,7 +58,7 @@ public class UpdateUserTests : BaseTest
     {
         // Arrange
         var testHarness = new InMemoryTestHarness();
-        var consumerHarness = testHarness.Consumer(() => Consumer);
+        testHarness.Consumer(() => Consumer);
 
         var request = Fixture.Create<UpdateUser>();
         
@@ -70,8 +70,8 @@ public class UpdateUserTests : BaseTest
         // Assert
         Assert.Multiple(() =>
         {
+            Assert.That(testHarness.Consumed.Select<UpdateUser>().Any(), Is.True);
             Assert.That(testHarness.Published.Select<Fault>().FirstOrDefault(), Is.Not.Null);
-            Assert.That(consumerHarness.Consumed.Select<UpdateUser>().Any(), Is.True);
         });
         
         await testHarness.Stop();

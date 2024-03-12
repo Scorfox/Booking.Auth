@@ -7,6 +7,7 @@ using MassTransit;
 using MassTransit.Testing;
 using Microsoft.EntityFrameworkCore;
 using Otus.Booking.Common.Booking.Contracts.Company.Requests;
+using Otus.Booking.Common.Booking.Contracts.Company.Responses;
 
 namespace Booking.Auth.Test.Company;
 
@@ -27,7 +28,7 @@ public class CreateCompanyTests : BaseTest
     {
         // Arrange
         var testHarness = new InMemoryTestHarness();
-        var consumerHarness = testHarness.Consumer(() => Consumer);
+        testHarness.Consumer(() => Consumer);
         
         await testHarness.Start(); 
         
@@ -38,7 +39,7 @@ public class CreateCompanyTests : BaseTest
         Assert.Multiple(async () =>
         {
             Assert.That(testHarness.Consumed.Select<CreateCompany>().Any(), Is.True);
-            Assert.That(consumerHarness.Consumed.Select<CreateCompany>().Any(), Is.True);
+            Assert.That(testHarness.Published.Select<CreateCompanyResult>().Any(), Is.True);
             Assert.That(await DataContext.Companies.AnyAsync(), Is.True);
         });
         
@@ -50,7 +51,7 @@ public class CreateCompanyTests : BaseTest
     {
         // Arrange
         var testHarness = new InMemoryTestHarness();
-        var consumerHarness = testHarness.Consumer(() => Consumer);
+        testHarness.Consumer(() => Consumer);
         const string inn = "123";
         
         var company = Fixture.Build<Domain.Entities.Company>().Without(e => e.Filials).Create();
@@ -70,8 +71,8 @@ public class CreateCompanyTests : BaseTest
         // Assert
         Assert.Multiple(() =>
         {
+            Assert.That(testHarness.Consumed.Select<CreateCompany>().Any(), Is.True);
             Assert.That(testHarness.Published.Select<Fault>().FirstOrDefault(), Is.Not.Null);
-            Assert.That(consumerHarness.Consumed.Select<CreateCompany>().Any(), Is.True);
         });
         
         await testHarness.Stop();

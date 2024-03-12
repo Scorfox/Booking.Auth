@@ -35,9 +35,10 @@ public class UserRepository(DataContext context) : BaseRepository<User>(context)
     }
 
     public async Task<List<User>> GetUsersAsync(int offset, int limit, CancellationToken token = default)
-    {
-        return await Context.Users.Skip(offset).Take(limit).ToListAsync(token);
-    }
+        =>await base.GetPaginatedListAsync(offset, limit, token);
+
+    public Task<int> GetUsersTotalCount(CancellationToken token = default)
+        => base.GetTotalCount(token);
 
     public async Task DeleteUserAsync(Guid id, CancellationToken cancellationToken)
     {

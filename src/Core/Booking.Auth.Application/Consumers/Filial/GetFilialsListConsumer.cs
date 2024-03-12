@@ -22,11 +22,12 @@ public class GetFilialsListConsumer:IConsumer<GetFilialsList>
     {
         var request = context.Message;
 
-        var filials = await _filialRepository.GetFilialsListAsync(request.Offset, request.Limit);
+        var filials = await _filialRepository.GetPaginatedListAsync(request.Offset, request.Count);
 
         await context.RespondAsync(new GetFilialsListResult
         {
-            Filials = _mapper.Map<List<FullFilialDto>>(filials)
+            Elements = _mapper.Map<List<FullFilialDto>>(filials), 
+            TotalCount = await _filialRepository.GetTotalCount()
         });
     }
 }

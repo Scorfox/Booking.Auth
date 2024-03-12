@@ -28,7 +28,7 @@ public class CreateFilialConsumer : IConsumer<CreateFilial>
             throw new BadRequestException($"Filial with NAME {request.Name} already exists");
         
         if (!await _companyRepository.HasAnyByIdAsync(request.CompanyId))
-            throw new BadRequestException($"Company with ID {request.Name} doesn't exists");
+            throw new BadRequestException($"Company with ID {request.CompanyId} doesn't exists");
             
         var filial = _mapper.Map<Domain.Entities.Filial>(request);
         

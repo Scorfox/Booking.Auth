@@ -50,7 +50,7 @@ public class CreateUserTests : BaseTest
     {
         // Arrange
         var testHarness = new InMemoryTestHarness();
-        var consumerHarness = testHarness.Consumer(() => Consumer);
+        testHarness.Consumer(() => Consumer);
         const string email = "test@gmail.com";
         
         var user = Fixture.Create<Domain.Entities.User>();
@@ -70,8 +70,8 @@ public class CreateUserTests : BaseTest
         // Assert
         Assert.Multiple(() =>
         {
+            Assert.That(testHarness.Consumed.Select<CreateUser>().Any(), Is.True);
             Assert.That(testHarness.Published.Select<Fault>().FirstOrDefault(), Is.Not.Null);
-            Assert.That(consumerHarness.Consumed.Select<CreateUser>().Any(), Is.True);
         });
         
         await testHarness.Stop();

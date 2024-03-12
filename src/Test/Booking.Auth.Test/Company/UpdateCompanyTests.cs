@@ -34,7 +34,7 @@ public class UpdateCompanyTests : BaseTest
         request.Id = company.Id;
         
         var testHarness = new InMemoryTestHarness();
-        var consumerHarness = testHarness.Consumer(() => Consumer);
+        testHarness.Consumer(() => Consumer);
         
         await testHarness.Start(); 
         
@@ -46,7 +46,7 @@ public class UpdateCompanyTests : BaseTest
         Assert.Multiple(() =>
         {
             Assert.That(testHarness.Consumed.Select<UpdateCompany>().Any(), Is.True);
-            Assert.That(consumerHarness.Consumed.Select<UpdateCompany>().Any(), Is.True);
+            Assert.That(testHarness.Published.Select<UpdateCompanyResult>().Any(), Is.True);
             Assert.That(company.Inn, Is.EqualTo(result?.Inn));
         });
         
@@ -58,7 +58,7 @@ public class UpdateCompanyTests : BaseTest
     {
         // Arrange
         var testHarness = new InMemoryTestHarness();
-        var consumerHarness = testHarness.Consumer(() => Consumer);
+        testHarness.Consumer(() => Consumer);
 
         var request = Fixture.Create<UpdateCompany>();
         
@@ -70,8 +70,8 @@ public class UpdateCompanyTests : BaseTest
         // Assert
         Assert.Multiple(() =>
         {
+            Assert.That(testHarness.Consumed.Select<UpdateCompany>().Any(), Is.True);
             Assert.That(testHarness.Published.Select<Fault>().FirstOrDefault(), Is.Not.Null);
-            Assert.That(consumerHarness.Consumed.Select<UpdateCompany>().Any(), Is.True);
         });
         
         await testHarness.Stop();

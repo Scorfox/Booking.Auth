@@ -4,8 +4,8 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyVersion>1.0.0301.21366</AssemblyVersion>
-        <FileVersion>1.0.0301.21366</FileVersion>
+        <AssemblyVersion>1.0.0312.12943</AssemblyVersion>
+        <FileVersion>1.0.0312.12943</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -18,7 +18,7 @@
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.2" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.1" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
-      <PackageReference Include="Otus.Booking.Common" Version="0.0.0-g4258d28345" />
+      <PackageReference Include="Otus.Booking.Common" Version="0.0.0-g058fece325" />
       <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.4.0" />
     </ItemGroup>
 

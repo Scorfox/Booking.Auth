@@ -35,9 +35,10 @@ public class UpdateFilialTests : BaseTest
         
         var request = Fixture.Create<UpdateFilial>();
         request.Id = filial.Id;
+        request.CompanyId = filial.CompanyId;
         
         var testHarness = new InMemoryTestHarness();
-        var consumerHarness = testHarness.Consumer(() => Consumer);
+        testHarness.Consumer(() => Consumer);
         
         await testHarness.Start(); 
         
@@ -49,7 +50,7 @@ public class UpdateFilialTests : BaseTest
         Assert.Multiple(() =>
         {
             Assert.That(testHarness.Consumed.Select<UpdateFilial>().Any(), Is.True);
-            Assert.That(consumerHarness.Consumed.Select<UpdateFilial>().Any(), Is.True);
+            Assert.That(testHarness.Published.Select<UpdateFilialResult>().Any(), Is.True);
             Assert.That(filial.Name, Is.EqualTo(result?.Name));
         });
         
@@ -61,7 +62,7 @@ public class UpdateFilialTests : BaseTest
     {
         // Arrange
         var testHarness = new InMemoryTestHarness();
-        var consumerHarness = testHarness.Consumer(() => Consumer);
+        testHarness.Consumer(() => Consumer);
 
         var request = Fixture.Create<UpdateFilial>();
         
@@ -74,7 +75,7 @@ public class UpdateFilialTests : BaseTest
         Assert.Multiple(() =>
         {
             Assert.That(testHarness.Published.Select<Fault>().FirstOrDefault(), Is.Not.Null);
-            Assert.That(consumerHarness.Consumed.Select<UpdateFilial>().Any(), Is.True);
+            Assert.That(testHarness.Consumed.Select<UpdateFilial>().Any(), Is.True);
         });
         
         await testHarness.Stop();

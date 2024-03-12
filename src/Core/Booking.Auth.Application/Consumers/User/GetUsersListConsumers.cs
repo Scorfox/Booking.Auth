@@ -22,11 +22,12 @@ public class GetUsersListConsumers:IConsumer<GetUsersList>
     {
         var request = context.Message;
 
-        var users = await _userRepository.GetUsersAsync(request.Offset, request.Limit);
+        var users = await _userRepository.GetPaginatedListAsync(request.Offset, request.Count);
 
         await context.RespondAsync(new GetUsersListResult
         {
-            Users = _mapper.Map<List<FullUserDto>>(users)
+            Elements = _mapper.Map<List<FullUserDto>>(users), 
+            TotalCount = await _userRepository.GetTotalCount()
         });
     }
 }
