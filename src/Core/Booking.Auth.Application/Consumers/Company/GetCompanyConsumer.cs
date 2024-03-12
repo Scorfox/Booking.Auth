@@ -7,7 +7,7 @@ using Otus.Booking.Common.Booking.Exceptions;
 
 namespace Booking.Auth.Application.Consumers.Company
 {
-    public class GetCompanyConsumer : IConsumer<GetCompanyId>
+    public class GetCompanyConsumer : IConsumer<GetCompanyById>
     {
         private readonly ICompanyRepository _companyRepository;
         private readonly IMapper _mapper;
@@ -17,7 +17,7 @@ namespace Booking.Auth.Application.Consumers.Company
             _companyRepository = companyRepository;
             _mapper = mapper;
         }
-        public async Task Consume(ConsumeContext<GetCompanyId> context)
+        public async Task Consume(ConsumeContext<GetCompanyById> context)
         {
             var request = context.Message;
 

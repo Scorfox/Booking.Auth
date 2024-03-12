@@ -7,7 +7,7 @@ using Otus.Booking.Common.Booking.Exceptions;
 
 namespace Booking.Auth.Application.Consumers.Filial
 {
-    public sealed class GetFilialConsumer : IConsumer<GetFilialId>
+    public sealed class GetFilialConsumer : IConsumer<GetFilialById>
     {
         private readonly IFilialRepository _filialRepository;
         private readonly IMapper _mapper;
@@ -17,7 +17,7 @@ namespace Booking.Auth.Application.Consumers.Filial
             _filialRepository = filialRepository;
             _mapper = mapper;
         }
-        public async Task Consume(ConsumeContext<GetFilialId> context)
+        public async Task Consume(ConsumeContext<GetFilialById> context)
         {
             var request = context.Message;
 

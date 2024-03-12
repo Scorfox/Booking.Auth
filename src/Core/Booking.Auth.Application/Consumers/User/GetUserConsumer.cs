@@ -7,7 +7,7 @@ using Otus.Booking.Common.Booking.Exceptions;
 
 namespace Booking.Auth.Application.Consumers.User
 {
-    public sealed class GetUserConsumer : IConsumer<GetUserId>
+    public sealed class GetUserConsumer : IConsumer<GetUserById>
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
@@ -18,7 +18,7 @@ namespace Booking.Auth.Application.Consumers.User
             _mapper = mapper;
         }
 
-        public async Task Consume(ConsumeContext<GetUserId> context)
+        public async Task Consume(ConsumeContext<GetUserById> context)
         {
             var request = context.Message;
 
