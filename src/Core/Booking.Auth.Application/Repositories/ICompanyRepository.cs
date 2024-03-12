@@ -6,6 +6,4 @@ public interface ICompanyRepository : IBaseRepository<Company>
 {
     Task<bool> HasAnyWithInnAsync(string inn, CancellationToken cancellationToken = default);
     Task<bool> HasAnyWithInnExceptIdAsync(Guid id, string inn, CancellationToken cancellationToken = default);
-
-    Task DeleteCompanyByIdAsync(Guid id, CancellationToken cancellationToken = default);
 }

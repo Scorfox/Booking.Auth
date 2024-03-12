@@ -23,11 +23,11 @@ public class GetCompaniesListConsumer:IConsumer<GetCompaniesList>
         var request = context.Message;
 
         var companies = await _companyRepository.GetPaginatedListAsync(request.Offset, request.Count);
-        var totalCount = await _companyRepository.GetTotalCount();
 
         await context.RespondAsync(new GetCompaniesListResult
         {
-            Elements = companies.Select(elm=>_mapper.Map<FullCompanyDto>(elm)).ToList(), TotalCount = totalCount
+            Elements = _mapper.Map<List<FullCompanyDto>>(companies), 
+            TotalCount = await _companyRepository.GetTotalCount()
         });
     }
 }

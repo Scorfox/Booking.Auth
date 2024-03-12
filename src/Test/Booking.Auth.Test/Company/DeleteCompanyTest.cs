@@ -1,14 +1,9 @@
 ﻿using AutoFixture;
-using AutoMapper;
 using Booking.Auth.Application.Consumers.Company;
-using Booking.Auth.Application.Mappings;
-using Booking.Auth.Domain.Entities;
-using Booking.Auth.Persistence.Context;
 using Booking.Auth.Persistence.Repositories;
 using MassTransit.Testing;
 using Otus.Booking.Common.Booking.Contracts.Company.Requests;
 using Otus.Booking.Common.Booking.Contracts.Company.Responses;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Booking.Auth.Test.Company
 {
@@ -22,16 +17,16 @@ namespace Booking.Auth.Test.Company
             Consumer = new DeleteCompanyConsumer(companyRepository);
         }
 
-
         [Test]
         public async Task TestDeleteCompany()
         {
+            // Arrange
             var company = Fixture.Build<Domain.Entities.Company>().Without(e => e.Filials).Create();
             await DataContext.Companies.AddAsync(company);
-
             await DataContext.SaveChangesAsync();
+            
             var testHarness = new InMemoryTestHarness();
-            var consumerHarness = testHarness.Consumer(() => Consumer);
+            testHarness.Consumer(() => Consumer);
 
             await testHarness.Start();
 
@@ -40,12 +35,12 @@ namespace Booking.Auth.Test.Company
             
             // Act
             await testHarness.InputQueueSendEndpoint.Send(request);
-            var result = testHarness.Published.Select<DeleteCompanyResult>().FirstOrDefault()?.Context.Message;
 
+            // Assert
             Assert.Multiple(() =>
             {
                 Assert.That(testHarness.Consumed.Select<DeleteCompany>().Any(), Is.True);
-                Assert.That(consumerHarness.Consumed.Select<DeleteCompany>().Any(), Is.True);
+                Assert.That(testHarness.Published.Select<DeleteCompanyResult>().Any(), Is.True);
             });
 
             await testHarness.Stop();

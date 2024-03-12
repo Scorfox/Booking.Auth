@@ -20,18 +20,4 @@ public class CompanyRepository(DataContext context) : BaseRepository<Company>(co
             .AsNoTracking()
             .AnyAsync(x => x.Id != id && x.Inn == inn, cancellationToken);
     }
-
-    public async Task<List<Company>> GetAllCompaniesAsync(int offset, int limit, CancellationToken cancellationToken = default) 
-        => await base.GetPaginatedListAsync(offset, limit, cancellationToken);
-
-    public async Task<int> GetCompaniesTotalCountAsync(CancellationToken cancellationToken = default)
-        => await base.GetTotalCount(cancellationToken);
-    
-    public async Task DeleteCompanyByIdAsync(Guid id, CancellationToken cancellationToken = default)
-    {
-        bool any = await Context.Companies.AnyAsync(elm => elm.Id == id, cancellationToken);
-
-        if (any)
-            await Context.Companies.Where(elm => elm.Id == id).ExecuteDeleteAsync(cancellationToken);
-    }
 }
