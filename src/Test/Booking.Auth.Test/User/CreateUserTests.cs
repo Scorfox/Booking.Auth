@@ -18,8 +18,7 @@ public class CreateUserTests : BaseTest
     public CreateUserTests()
     {
         var config = new MapperConfiguration(cfg => cfg.AddProfile<UserMapper>());
-        
-        Consumer = new CreateUserConsumer(new UserRepository(DataContext), new Mapper(config));
+        Consumer = new CreateUserConsumer(new UserRepository(DataContext), new CompanyRepository(DataContext),new Mapper(config));
     }
 
     [Test]

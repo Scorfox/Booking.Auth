@@ -11,11 +11,13 @@ namespace Booking.Auth.Application.Consumers.User;
 public class CreateUserConsumer : IConsumer<CreateUser>
 {
     private readonly IUserRepository _userRepository;
+    private readonly ICompanyRepository _companyRepository;
     private readonly IMapper _mapper;
 
-    public CreateUserConsumer(IUserRepository userRepository, IMapper mapper)
+    public CreateUserConsumer(IUserRepository userRepository, ICompanyRepository companyRepository, IMapper mapper)
     {
         _userRepository = userRepository;
+        _companyRepository = companyRepository;
         _mapper = mapper;
     }
     
@@ -27,9 +29,18 @@ public class CreateUserConsumer : IConsumer<CreateUser>
             throw new BadRequestException($"User with {request.Email} already exists");
             
         var user = _mapper.Map<Domain.Entities.User>(request);
+
         user.PasswordHash = new PasswordHasher<Domain.Entities.User>().HashPassword(user, request.Password);
         
         await _userRepository.CreateAsync(user);
+
+        await context.Publish(new CreateUserNotification
+        {
+            Email = request.Email,
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            Login = request.Login
+        });
 
         await context.RespondAsync(_mapper.Map<CreateUserResult>(user));
     }
