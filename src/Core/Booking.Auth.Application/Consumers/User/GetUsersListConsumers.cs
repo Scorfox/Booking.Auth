@@ -26,7 +26,7 @@ public class GetUsersListConsumers:IConsumer<GetUsersList>
 
         await context.RespondAsync(new GetUsersListResult
         {
-            Elements = _mapper.Map<List<FullUserDto>>(users), 
+            Elements = _mapper.Map<List<UserGettingDto>>(users), 
             TotalCount = await _userRepository.GetTotalCount()
         });
     }

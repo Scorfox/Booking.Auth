@@ -15,6 +15,7 @@ public class User : BaseEntity
     public string PhoneNumber { get; set; }
     public bool EmailConfirmed { get; set; }
     
-    public Role Role { get; set; }
+    public virtual Role Role { get; set; }
     public Guid RoleId { get; set; }
+    public Guid? CompanyId { get; set; }
 }

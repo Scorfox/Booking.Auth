@@ -8,8 +8,6 @@ using Booking.Auth.Persistence;
 using Booking.Auth.Persistence.Context;
 using Booking.Auth.WebAPI.Extensions;
 using MassTransit;
-using Microsoft.OpenApi.Models;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,49 +20,9 @@ builder.Services.ConfigureCorsPolicy();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(opt =>
-{
-    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
-    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        In = ParameterLocation.Header,
-        Description = "Please enter token",
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        BearerFormat = "JWT",
-        Scheme = "bearer"
-    });
-    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
-                }
-            },
-            new string[]{}
-        }
-    });
-});
 
 builder.Services.AddMassTransit(x =>
 {
-    // Добавляем шину сообщений
-
-#if dds_tests
-    x.UsingRabbitMq((context, cfg) =>
-    {
-        cfg.Host(builder.Configuration["RabbitMQdds:Host"], h =>
-        {
-            h.Username(builder.Configuration["RabbitMQdds:Username"]);
-            h.Password(builder.Configuration["RabbitMQdds:Password"]);
-        });
-        cfg.ConfigureEndpoints(context);
-    });
-#else
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host(builder.Configuration["RabbitMQ:Host"], h =>
@@ -74,24 +32,27 @@ builder.Services.AddMassTransit(x =>
         });
         cfg.ConfigureEndpoints(context);
     });
-#endif
+    
     // User
     x.AddConsumer<CreateUserConsumer>();
-    x.AddConsumer<UpdateUserConsumer>();
+    x.AddConsumer<GetUserConsumer>();
     x.AddConsumer<GetUsersListConsumers>();
+    x.AddConsumer<UpdateUserConsumer>();
     x.AddConsumer<DeleteUserConsumer>();
 
     // Company
     x.AddConsumer<CreateCompanyConsumer>();
-    x.AddConsumer<UpdateCompanyConsumer>();
+    x.AddConsumer<GetCompanyConsumer>();
     x.AddConsumer<GetCompaniesListConsumer>();
+    x.AddConsumer<UpdateCompanyConsumer>();
     x.AddConsumer<DeleteCompanyConsumer>();
     
     // Filial
     x.AddConsumer<CreateFilialConsumer>();
+    x.AddConsumer<GetFilialConsumer>();
+    x.AddConsumer<GetFilialsListConsumer>();
     x.AddConsumer<UpdateFilialConsumer>();
     x.AddConsumer<DeleteFilialConsumer>();
-    x.AddConsumer<GetFilialsListConsumer>();
     
     // Auth
     x.AddConsumer<AuthenticateConsumer>();
@@ -103,8 +64,6 @@ var serviceScope = app.Services.CreateScope();
 var dataContext = serviceScope.ServiceProvider.GetService<DataContext>();
 dataContext?.Database.EnsureCreated();
 
-app.UseSwagger();
-app.UseSwaggerUI();
 app.UseCors();
 app.MapControllers();
 app.UseAuthentication();

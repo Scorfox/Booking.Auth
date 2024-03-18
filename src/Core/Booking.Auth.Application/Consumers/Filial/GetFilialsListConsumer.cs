@@ -7,7 +7,7 @@ using Otus.Booking.Common.Booking.Contracts.Filial.Responses;
 
 namespace Booking.Auth.Application.Consumers.Filial;
 
-public class GetFilialsListConsumer:IConsumer<GetFilialsList>
+public class GetFilialsListConsumer : IConsumer<GetFilialsList>
 {
     private readonly IFilialRepository _filialRepository;
     private readonly IMapper _mapper;
@@ -22,11 +22,11 @@ public class GetFilialsListConsumer:IConsumer<GetFilialsList>
     {
         var request = context.Message;
 
-        var filials = await _filialRepository.GetPaginatedListAsync(request.Offset, request.Count);
+        var filials = await _filialRepository.GetPaginatedListAsync(request.Offset, request.Count, e => e.CompanyId == request.CompanyId);
 
         await context.RespondAsync(new GetFilialsListResult
         {
-            Elements = _mapper.Map<List<FullFilialDto>>(filials), 
+            Elements = _mapper.Map<List<FilialGettingDto>>(filials), 
             TotalCount = await _filialRepository.GetTotalCount()
         });
     }

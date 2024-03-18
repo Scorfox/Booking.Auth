@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Booking.Auth.Domain.Entities;
 using Otus.Booking.Common.Booking.Contracts.User.Models;
 using Otus.Booking.Common.Booking.Contracts.User.Requests;
 using Otus.Booking.Common.Booking.Contracts.User.Responses;
@@ -9,21 +10,19 @@ public sealed class UserMapper : Profile
 {
     public UserMapper()
     {
-        CreateMap<CreateUser, Domain.Entities.User>()
+        CreateMap<CreateUser, User>()
             .ForMember(d => d.Email, s => s.MapFrom(e => e.Email.ToLower()));
-        CreateMap<Domain.Entities.User, CreateUserResult>()
-            .ForMember(d => d.Email, s => s.MapFrom(e => e.Email.ToLower()));
-
-        CreateMap<FullUserDto, Domain.Entities.User>()
-            .ForMember(d => d.Email, s => s.MapFrom(e => e.Email.ToLower()));
-        CreateMap<Domain.Entities.User, FullUserDto>()
+        CreateMap<User, CreateUserResult>()
             .ForMember(d => d.Email, s => s.MapFrom(e => e.Email.ToLower()));
 
-        CreateMap<UpdateUser, Domain.Entities.User>()
-            .ForMember(d => d.Email, s => s.MapFrom(e => e.Email.ToLower()));
-        CreateMap<Domain.Entities.User, UpdateUserResult>()
+        CreateMap<User, UserGettingDto>()
             .ForMember(d => d.Email, s => s.MapFrom(e => e.Email.ToLower()));
 
-        CreateMap<Domain.Entities.User, GetUserResult>();
+        CreateMap<UpdateUser, User>()
+            .ForMember(d => d.Email, s => s.MapFrom(e => e.Email.ToLower()));
+        CreateMap<User, UpdateUserResult>()
+            .ForMember(d => d.Email, s => s.MapFrom(e => e.Email.ToLower()));
+
+        CreateMap<User, GetUserResult>();
     }
 }
