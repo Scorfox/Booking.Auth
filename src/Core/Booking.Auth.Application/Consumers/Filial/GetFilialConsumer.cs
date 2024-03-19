@@ -5,29 +5,28 @@ using Otus.Booking.Common.Booking.Contracts.Filial.Requests;
 using Otus.Booking.Common.Booking.Contracts.Filial.Responses;
 using Otus.Booking.Common.Booking.Exceptions;
 
-namespace Booking.Auth.Application.Consumers.Filial
+namespace Booking.Auth.Application.Consumers.Filial;
+
+public sealed class GetFilialConsumer : IConsumer<GetFilialById>
 {
-    public sealed class GetFilialConsumer : IConsumer<GetFilialById>
+    private readonly IFilialRepository _filialRepository;
+    private readonly IMapper _mapper;
+
+    public GetFilialConsumer(IFilialRepository filialRepository, IMapper mapper)
     {
-        private readonly IFilialRepository _filialRepository;
-        private readonly IMapper _mapper;
-
-        public GetFilialConsumer(IFilialRepository filialRepository, IMapper mapper)
-        {
-            _filialRepository = filialRepository;
-            _mapper = mapper;
-        }
+        _filialRepository = filialRepository;
+        _mapper = mapper;
+    }
         
-        public async Task Consume(ConsumeContext<GetFilialById> context)
-        {
-            var request = context.Message;
+    public async Task Consume(ConsumeContext<GetFilialById> context)
+    {
+        var request = context.Message;
 
-            var filial = await _filialRepository.FindByIdAsync(request.Id);
+        var filial = await _filialRepository.FindByIdAsync(request.Id);
 
-            if (filial == null)
-                throw new NotFoundException($"Filial with ID {request.Id} doesn't exists");
+        if (filial == null)
+            throw new NotFoundException($"Filial with ID {request.Id} doesn't exists");
 
-            await context.RespondAsync(_mapper.Map<GetFilialResult>(filial));
-        }
+        await context.RespondAsync(_mapper.Map<GetFilialResult>(filial));
     }
 }

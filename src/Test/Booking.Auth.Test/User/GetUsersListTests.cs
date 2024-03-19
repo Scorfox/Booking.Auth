@@ -2,6 +2,7 @@
 using AutoMapper;
 using Booking.Auth.Application.Consumers.User;
 using Booking.Auth.Application.Mappings;
+using Booking.Auth.Domain.Entities;
 using Booking.Auth.Persistence.Repositories;
 using MassTransit.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -18,8 +19,7 @@ public class GetUsersListTests : BaseTest
     {
         var config = new MapperConfiguration(cfg => cfg.AddProfile<UserMapper>());
 
-        var userRepository = new UserRepository(DataContext);
-        Consumer = new GetUsersListConsumers(userRepository, new Mapper(config));
+        Consumer = new GetUsersListConsumers(new UserRepository(DataContext), new Mapper(config));
     }
 
     [Test]
@@ -27,21 +27,25 @@ public class GetUsersListTests : BaseTest
     {
         // Arrange
         var users = new List<Domain.Entities.User>();
-        
+        var roleIdByName = Application.Common.Roles.GetAllRolesWithIds();
         for (var i = 0; i < 5; i++)
-            users.Add(Fixture.Build<Domain.Entities.User>().Create());
-        
+            users.Add(Fixture.Build<Domain.Entities.User>()
+                .Without(e => e.Role)
+                .With(e => e.RoleId, roleIdByName[Application.Common.Roles.Admin])
+                .Create());
+
         await DataContext.Users.AddRangeAsync(users);
-
         await DataContext.SaveChangesAsync();
+        
         var testHarness = new InMemoryTestHarness();
-        var consumerHarness = testHarness.Consumer(() => Consumer);
-
+        testHarness.Consumer(() => Consumer);
         await testHarness.Start();
 
-        var request = Fixture.Create<GetUsersList>();
-        request.Offset = 0;
-        request.Count = 3;
+        var request = Fixture.Build<GetUsersList>()
+            .With(e => e.Offset, 0)
+            .With(e => e.Count, 3)
+            .With(e => e.RoleId, roleIdByName[Application.Common.Roles.Admin])
+            .Create();
         
         // Act
         await testHarness.InputQueueSendEndpoint.Send(request);
@@ -52,7 +56,7 @@ public class GetUsersListTests : BaseTest
         Assert.Multiple(() =>
         {
             Assert.That(testHarness.Consumed.Select<GetUsersList>().Any(), Is.True);
-            Assert.That(consumerHarness.Consumed.Select<GetUsersList>().Any(), Is.True);
+            Assert.That(testHarness.Published.Select<GetUsersListResult>().Any(), Is.True);
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Elements.Count, Is.EqualTo(3));
             Assert.That(result.TotalCount, Is.EqualTo(count));

@@ -16,9 +16,8 @@ public class GetFilialsListTests:BaseTest
     public GetFilialsListTests()
     {
         var config = new MapperConfiguration(cfg => cfg.AddProfile<FilialMapper>());
-            
-        var filialRepository = new FilialRepository(DataContext);
-        Consumer = new GetFilialsListConsumer(filialRepository, new Mapper(config));
+        
+        Consumer = new GetFilialsListConsumer(new FilialRepository(DataContext), new Mapper(config));
     }
 
     [Test]
@@ -26,21 +25,26 @@ public class GetFilialsListTests:BaseTest
     {
         // Arrange
         var filials = new List<Domain.Entities.Filial>();
-                
+        
         for (var i = 0; i < 5; i++)
-            filials.Add(Fixture.Build<Domain.Entities.Filial>().Without(e => e.Company).Create());
-            
-        await DataContext.Filials.AddRangeAsync(filials);
+            filials.Add(Fixture.Build<Domain.Entities.Filial>()
+                .Without(e => e.Company)
+                .Create());
+        
+        var company = Fixture.Build<Domain.Entities.Company>().With(e => e.Filials, filials).Create();
+        
+        await DataContext.Companies.AddAsync(company);
         await DataContext.SaveChangesAsync();
             
         var testHarness = new InMemoryTestHarness();
         testHarness.Consumer(() => Consumer);
-
         await testHarness.Start();
 
-        var request = Fixture.Create<GetFilialsList>();
-        request.Offset = 0;
-        request.Count = 3;
+        var request = Fixture.Build<GetFilialsList>()
+            .With(e => e.Offset, 0)
+            .With(e => e.Count, 3)
+            .With(e => e.CompanyId, company.Id)
+            .Create();
             
         // Act
         await testHarness.InputQueueSendEndpoint.Send(request);

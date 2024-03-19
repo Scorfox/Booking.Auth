@@ -2,7 +2,6 @@
 using System.Security.Claims;
 using System.Text;
 using Booking.Auth.Application.Infrastructure;
-using Booking.Auth.WebAPI.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
@@ -18,20 +17,21 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         _options = options.Value;
     }
     
-    public string GenerateToken(string email, string? roleName)
+    public string GenerateToken(string email, string? roleName, Guid? companyId = null)
     {
         var key = Encoding.ASCII.GetBytes(_options.SecretKey);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[]
             {
-                new Claim("Id", Guid.NewGuid().ToString()),
+                new Claim("id", Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, email),
                 new Claim(JwtRegisteredClaimNames.Jti,
                     Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.Role, roleName!),
+                new Claim("companyId", companyId.ToString()!),
             }),
-            Expires = DateTime.UtcNow.AddMinutes(5),
+            Expires = DateTime.UtcNow.Add(_options.LifeTime),
             Issuer = _options.Issuer,
             Audience = _options.Audience,
             SigningCredentials = new SigningCredentials

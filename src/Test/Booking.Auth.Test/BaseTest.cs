@@ -1,6 +1,5 @@
 ﻿using AutoFixture;
 using Booking.Auth.Persistence.Context;
-using MassTransit.Testing;
 using Microsoft.EntityFrameworkCore;
 
 namespace Booking.Auth.Test;

@@ -1,4 +1,5 @@
-﻿using Booking.Auth.Application.Repositories;
+﻿using System.Linq.Expressions;
+using Booking.Auth.Application.Repositories;
 using Booking.Auth.Domain.Common;
 using Booking.Auth.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
@@ -49,9 +50,10 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
         return await Context.Set<T>().ToListAsync(cancellationToken);
     }
 
-    public async Task<List<T>> GetPaginatedListAsync(int offset, int count, CancellationToken token)
+    public async Task<List<T>> GetPaginatedListAsync(int offset, int count, Expression<Func<T, bool>>? expression, CancellationToken token)
     {
-        return await Context.Set<T>().Skip(offset).Take(count).ToListAsync(token);
+        var query = expression == null ? Context.Set<T>() : Context.Set<T>().Where(expression);
+        return await query.Skip(offset).Take(count).ToListAsync(token);
     }
 
     public async Task<int> GetTotalCount(CancellationToken token)

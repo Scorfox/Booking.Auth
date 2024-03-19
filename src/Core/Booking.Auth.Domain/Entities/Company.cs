@@ -9,5 +9,5 @@ public class Company : BaseEntity
     public string Inn { get; set; }
     public string MainAddress { get; set; }
     
-    public List<Filial> Filials { get; set; }
+    public virtual List<Filial> Filials { get; set; }
 }

@@ -1,5 +1,5 @@
 ﻿using Booking.Auth.Application.Repositories;
-using Booking.Auth.WebAPI.Services;
+using Booking.Auth.Application.Services;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Otus.Booking.Common.Booking.Contracts.Auth.Requests;
@@ -35,7 +35,7 @@ public class AuthenticateConsumer : IConsumer<Authenticate>
         
         await context.RespondAsync(new AuthenticateResult
         {
-            AccessToken = _jwtTokenGenerator.GenerateToken(user.Email, user.Role.Name)
+            AccessToken = _jwtTokenGenerator.GenerateToken(user.Email, user.Role.Name, user.CompanyId)
         });
     }
 }

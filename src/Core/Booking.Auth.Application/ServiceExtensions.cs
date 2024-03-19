@@ -2,7 +2,6 @@
 using System.Text;
 using Booking.Auth.Application.Infrastructure;
 using Booking.Auth.Application.Services;
-using Booking.Auth.WebAPI.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;

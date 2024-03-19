@@ -5,29 +5,28 @@ using Otus.Booking.Common.Booking.Contracts.Company.Requests;
 using Otus.Booking.Common.Booking.Contracts.Company.Responses;
 using Otus.Booking.Common.Booking.Exceptions;
 
-namespace Booking.Auth.Application.Consumers.Company
+namespace Booking.Auth.Application.Consumers.Company;
+
+public class GetCompanyConsumer : IConsumer<GetCompanyById>
 {
-    public class GetCompanyConsumer : IConsumer<GetCompanyById>
+    private readonly ICompanyRepository _companyRepository;
+    private readonly IMapper _mapper;
+
+    public GetCompanyConsumer(ICompanyRepository companyRepository, IMapper mapper)
     {
-        private readonly ICompanyRepository _companyRepository;
-        private readonly IMapper _mapper;
-
-        public GetCompanyConsumer(ICompanyRepository companyRepository, IMapper mapper)
-        {
-            _companyRepository = companyRepository;
-            _mapper = mapper;
-        }
+        _companyRepository = companyRepository;
+        _mapper = mapper;
+    }
         
-        public async Task Consume(ConsumeContext<GetCompanyById> context)
-        {
-            var request = context.Message;
+    public async Task Consume(ConsumeContext<GetCompanyById> context)
+    {
+        var request = context.Message;
 
-            var company = await _companyRepository.FindByIdAsync(request.Id);
+        var company = await _companyRepository.FindByIdAsync(request.Id);
 
-            if (company == null) 
-                throw new NotFoundException($"Company with ID {request.Id} doesn't exists");
+        if (company == null) 
+            throw new NotFoundException($"Company with ID {request.Id} doesn't exists");
 
-            await context.RespondAsync(_mapper.Map<GetCompanyResult>(company));
-        }
+        await context.RespondAsync(_mapper.Map<GetCompanyResult>(company));
     }
 }

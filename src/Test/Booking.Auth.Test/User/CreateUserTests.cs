@@ -7,6 +7,7 @@ using MassTransit;
 using MassTransit.Testing;
 using Microsoft.EntityFrameworkCore;
 using Otus.Booking.Common.Booking.Contracts.User.Requests;
+using Otus.Booking.Common.Booking.Contracts.User.Responses;
 
 namespace Booking.Auth.Test.User;
 
@@ -18,8 +19,7 @@ public class CreateUserTests : BaseTest
     {
         var config = new MapperConfiguration(cfg => cfg.AddProfile<UserMapper>());
         
-        var userRepository = new UserRepository(DataContext);
-        Consumer = new CreateUserConsumer(userRepository, new Mapper(config));
+        Consumer = new CreateUserConsumer(new UserRepository(DataContext), new Mapper(config));
     }
 
     [Test]
@@ -27,8 +27,7 @@ public class CreateUserTests : BaseTest
     {
         // Arrange
         var testHarness = new InMemoryTestHarness();
-        var consumerHarness = testHarness.Consumer(() => Consumer);
-        
+        testHarness.Consumer(() => Consumer);
         await testHarness.Start(); 
         
         // Act
@@ -38,7 +37,7 @@ public class CreateUserTests : BaseTest
         Assert.Multiple(async () =>
         {
             Assert.That(testHarness.Consumed.Select<CreateUser>().Any(), Is.True);
-            Assert.That(consumerHarness.Consumed.Select<CreateUser>().Any(), Is.True);
+            Assert.That(testHarness.Published.Select<CreateUserResult>().Any(), Is.True);
             Assert.That(await DataContext.Users.AnyAsync(), Is.True);
         });
         
@@ -49,19 +48,21 @@ public class CreateUserTests : BaseTest
     public async Task CreateUser_WithNotUniqueEmail_ReturnsException()
     {
         // Arrange
-        var testHarness = new InMemoryTestHarness();
-        testHarness.Consumer(() => Consumer);
         const string email = "test@gmail.com";
         
-        var user = Fixture.Create<Domain.Entities.User>();
-        user.Email = email;
+        var user = Fixture.Build<Domain.Entities.User>()
+                .With(e => e.Email, email)
+                .Create();
 
         await DataContext.Users.AddAsync(user);
         await DataContext.SaveChangesAsync();
 
-        var request = Fixture.Create<CreateUser>();
-        request.Email = email;
+        var request = Fixture.Build<CreateUser>()
+            .With(e => e.Email, email)
+            .Create();
         
+        var testHarness = new InMemoryTestHarness();
+        testHarness.Consumer(() => Consumer);
         await testHarness.Start(); 
         
         // Act

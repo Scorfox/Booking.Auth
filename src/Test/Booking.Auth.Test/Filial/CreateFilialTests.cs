@@ -22,8 +22,7 @@ public class CreateFilialTests : BaseTest
         var config = new MapperConfiguration(cfg => cfg.AddProfile<FilialMapper>());
         
         CompanyRepository = new CompanyRepository(DataContext);
-        var filialRepository = new FilialRepository(DataContext);
-        Consumer = new CreateFilialConsumer(CompanyRepository, filialRepository, new Mapper(config));
+        Consumer = new CreateFilialConsumer(CompanyRepository, new FilialRepository(DataContext), new Mapper(config));
     }
 
     [Test]
@@ -32,14 +31,14 @@ public class CreateFilialTests : BaseTest
         // Arrange
         var company = Fixture.Build<Domain.Entities.Company>().Without(e => e.Filials).Create();
         await CompanyRepository.CreateAsync(company);
+
+        var request = Fixture.Build<CreateFilial>()
+            .With(e => e.CompanyId, company.Id)
+            .Create();
         
         var testHarness = new InMemoryTestHarness();
         testHarness.Consumer(() => Consumer);
-        
         await testHarness.Start();
-
-        var request = Fixture.Create<CreateFilial>();
-        request.CompanyId = company.Id;
         
         // Act
         await testHarness.InputQueueSendEndpoint.Send(request);
@@ -59,21 +58,22 @@ public class CreateFilialTests : BaseTest
     public async Task CreateFilial_WithNotUniqueName_ReturnsException()
     {
         // Arrange
-        var testHarness = new InMemoryTestHarness();
-        testHarness.Consumer(() => Consumer);
         const string name = "FilialName";
         
-        var filial = Fixture.Build<Domain.Entities.Filial>().With(e => e.Company, 
-            Fixture.Build<Domain.Entities.Company>().Without(e => e.Filials).Create)
+        var filial = Fixture.Build<Domain.Entities.Filial>()
+            .With(e => e.Name, name)
+            .With(e => e.Company, Fixture.Build<Domain.Entities.Company>().Without(e => e.Filials).Create)
             .Create();
-        filial.Name = name;
 
         await DataContext.Filials.AddAsync(filial);
         await DataContext.SaveChangesAsync();
 
-        var request = Fixture.Create<CreateFilial>();
-        request.Name = name;
+        var request = Fixture.Build<CreateFilial>()
+            .With(e => e.Name, name)
+            .Create();
         
+        var testHarness = new InMemoryTestHarness();
+        testHarness.Consumer(() => Consumer);
         await testHarness.Start(); 
         
         // Act

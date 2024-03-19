@@ -9,15 +9,16 @@ public sealed class CompanyMapper : Profile
 {
     public CompanyMapper()
     {
+        // Create
         CreateMap<CreateCompany, Domain.Entities.Company>();
         CreateMap<Domain.Entities.Company, CreateCompanyResult>();
         
+        // Create
+        CreateMap<Domain.Entities.Company, CompanyGettingDto>();
+        CreateMap<Domain.Entities.Company, GetCompanyResult>();
+        
+        // Update
         CreateMap<UpdateCompany, Domain.Entities.Company>();
         CreateMap<Domain.Entities.Company, UpdateCompanyResult>();
-
-        CreateMap<FullCompanyDto, Domain.Entities.Company>();
-        CreateMap<Domain.Entities.Company, FullCompanyDto>();
-
-        CreateMap<Domain.Entities.Company, GetCompanyResult>();
     }
 }

@@ -2,50 +2,52 @@
 using AutoMapper;
 using Booking.Auth.Application.Consumers.Company;
 using Booking.Auth.Application.Mappings;
+using Booking.Auth.Application.Repositories;
 using Booking.Auth.Persistence.Repositories;
-using MassTransit;
 using MassTransit.Testing;
-using Microsoft.EntityFrameworkCore;
 using Otus.Booking.Common.Booking.Contracts.Company.Requests;
+using Otus.Booking.Common.Booking.Contracts.Company.Responses;
 
-namespace Booking.Auth.Test.Company
+namespace Booking.Auth.Test.Company;
+
+public class GetCompanyTest : BaseTest
 {
-    public class GetCompanyTest : BaseTest
+    private GetCompanyConsumer Consumer { get; }
+    private ICompanyRepository CompanyRepository { get; }
+
+    public GetCompanyTest()
     {
-        private GetCompanyConsumer Consumer { get; }
+        var config = new MapperConfiguration(cfg => cfg.AddProfile<CompanyMapper>());
+        
+        CompanyRepository = new CompanyRepository(DataContext);
+        Consumer = new GetCompanyConsumer(CompanyRepository, new Mapper(config));
+    }
 
-        public GetCompanyTest()
+    [Test]
+    public async Task GetCompanyByIdTest_ReturnsSuccess()
+    {
+        // Arrange
+        var company = Fixture.Build<Domain.Entities.Company>().Without(e => e.Filials).Create();
+        await CompanyRepository.CreateAsync(company);
+
+        var request = Fixture.Build<GetCompanyById>()
+            .With(e => e.Id, company.Id)
+            .Create();
+
+        var testHarness = new InMemoryTestHarness();
+        testHarness.Consumer(() => Consumer);
+        await testHarness.Start();
+
+        // Act
+        await testHarness.InputQueueSendEndpoint.Send(request);
+
+        // Assert
+        Assert.Multiple(() =>
         {
-            var config = new MapperConfiguration(cfg => cfg.AddProfile<CompanyMapper>());
+            Assert.That(testHarness.Consumed.Select<GetCompanyById>().Any(), Is.True);
+            Assert.That(testHarness.Published.Select<GetCompanyResult>().Any(), Is.True);
+        });
 
-            var companyRepository = new CompanyRepository(DataContext);
-            Consumer = new GetCompanyConsumer(companyRepository, new Mapper(config));
-        }
-
-        [Test]
-        public async Task GetCompanyByIdTest_ReturnsSuccess()
-        {
-            // Arrange
-            var testHarness = new InMemoryTestHarness();
-            var consumerHarness = testHarness.Consumer(() => Consumer);
-            Guid id = Guid.NewGuid();
-
-            var request = Fixture.Create<GetCompanyById>();
-            request.Id = id;
-
-            await testHarness.Start();
-
-            // Act
-            await testHarness.InputQueueSendEndpoint.Send(request);
-
-            // Assert
-            Assert.Multiple(() =>
-            {
-                Assert.That(testHarness.Consumed.Select<GetCompanyById>().Any(), Is.True);
-                Assert.That(consumerHarness.Consumed.Select<GetCompanyById>().Any(), Is.True);
-            });
-
-            await testHarness.Stop();
-        }
+        await testHarness.Stop();
     }
 }

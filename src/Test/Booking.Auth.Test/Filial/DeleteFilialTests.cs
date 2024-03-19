@@ -5,47 +5,46 @@ using MassTransit.Testing;
 using Otus.Booking.Common.Booking.Contracts.Filial.Requests;
 using Otus.Booking.Common.Booking.Contracts.Filial.Responses;
 
-namespace Booking.Auth.Test.Filial
+namespace Booking.Auth.Test.Filial;
+
+public class DeleteFilialTests: BaseTest
 {
-    public class DeleteFilialTests: BaseTest
+    private DeleteFilialConsumer Consumer;
+
+    public DeleteFilialTests()
     {
-        private DeleteFilialConsumer Consumer;
+        var filialRepository = new FilialRepository(DataContext);
+        Consumer = new DeleteFilialConsumer(filialRepository);
+    }
 
-        public DeleteFilialTests()
+    [Test]
+    public async Task DeleteFilialTest()
+    {
+        // Acr
+        var filial = Fixture.Build<Domain.Entities.Filial>().Without(e => e.Company).Create();
+        await DataContext.Filials.AddAsync(filial);
+        await DataContext.SaveChangesAsync();
+
+        var request = Fixture.Build<DeleteFilial>()
+            .With(e => e.Id, filial.Id)
+            .Create();
+        
+        var testHarness = new InMemoryTestHarness();
+        testHarness.Consumer(() => Consumer);
+        await testHarness.Start();
+
+        // Act
+        await testHarness.InputQueueSendEndpoint.Send(request);
+
+        // Assert
+        Assert.Multiple(() =>
         {
-            var filialRepository = new FilialRepository(DataContext);
-            Consumer = new DeleteFilialConsumer(filialRepository);
-        }
+            Assert.That(testHarness.Consumed.Select<DeleteFilial>().Any(), Is.True);
+            Assert.That(testHarness.Published.Select<DeleteFilialResult>().Any(), Is.True);
+        });
 
-        [Test]
-        public async Task DeleteFilialTest()
-        {
-            // Acr
-            var filial = Fixture.Build<Domain.Entities.Filial>().Without(e => e.Company).Create();
-            await DataContext.Filials.AddAsync(filial);
-            await DataContext.SaveChangesAsync();
-            
-            var testHarness = new InMemoryTestHarness();
-            testHarness.Consumer(() => Consumer);
-
-            await testHarness.Start();
-
-            var request = Fixture.Create<DeleteFilial>();
-            request.Id = filial.Id;
-
-            // Act
-            await testHarness.InputQueueSendEndpoint.Send(request);
-
-            // Assert
-            Assert.Multiple(() =>
-            {
-                Assert.That(testHarness.Consumed.Select<DeleteFilial>().Any(), Is.True);
-                Assert.That(testHarness.Published.Select<DeleteFilialResult>().Any(), Is.True);
-            });
-
-            await testHarness.Stop();
-
-        }
+        await testHarness.Stop();
 
     }
+
 }

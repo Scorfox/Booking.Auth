@@ -18,7 +18,7 @@
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.2" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.1" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
-      <PackageReference Include="Otus.Booking.Common" Version="0.0.0-g2849ad0d3d" />
+      <PackageReference Include="Otus.Booking.Common" Version="0.0.0-g283ba051b3" />
       <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.4.0" />
     </ItemGroup>
 
