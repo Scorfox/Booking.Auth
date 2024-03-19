@@ -18,8 +18,7 @@ public class UpdateUserTests : BaseTest
     {
         var config = new MapperConfiguration(cfg => cfg.AddProfile<UserMapper>());
         
-        var userRepository = new UserRepository(DataContext);
-        Consumer = new UpdateUserConsumer(userRepository, new Mapper(config));
+        Consumer = new UpdateUserConsumer(new Mapper(config), new UserRepository(DataContext));
     }
 
     [Test]
@@ -30,12 +29,10 @@ public class UpdateUserTests : BaseTest
         await DataContext.Users.AddAsync(user);
         await DataContext.SaveChangesAsync();
         
-        var request = Fixture.Create<UpdateUser>();
-        request.Id = user.Id;
+        var request = Fixture.Build<UpdateUser>().With(e => e.Id, user.Id).Create();
         
         var testHarness = new InMemoryTestHarness();
         testHarness.Consumer(() => Consumer);
-        
         await testHarness.Start(); 
         
         // Act
@@ -57,11 +54,10 @@ public class UpdateUserTests : BaseTest
     public async Task UpdateNotCreatedUser_ReturnsException()
     {
         // Arrange
-        var testHarness = new InMemoryTestHarness();
-        testHarness.Consumer(() => Consumer);
-
         var request = Fixture.Create<UpdateUser>();
         
+        var testHarness = new InMemoryTestHarness();
+        testHarness.Consumer(() => Consumer);
         await testHarness.Start(); 
         
         // Act

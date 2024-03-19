@@ -18,28 +18,26 @@ public class UpdateFilialTests : BaseTest
     {
         var config = new MapperConfiguration(cfg => cfg.AddProfile<FilialMapper>());
         
-        var companyRepository = new CompanyRepository(DataContext);
-        var filialRepository = new FilialRepository(DataContext);
-        Consumer = new UpdateFilialConsumer(companyRepository, filialRepository, new Mapper(config));
+        Consumer = new UpdateFilialConsumer(new CompanyRepository(DataContext), new FilialRepository(DataContext), new Mapper(config));
     }
 
     [Test]
     public async Task UpdateFilial_ReturnsSuccess()
     {
         // Arrange
-        var filial = Fixture.Build<Domain.Entities.Filial>().With(e => e.Company, 
-                Fixture.Build<Domain.Entities.Company>().Without(e => e.Filials).Create)
+        var filial = Fixture.Build<Domain.Entities.Filial>()
+            .With(e => e.Company, Fixture.Build<Domain.Entities.Company>().Without(e => e.Filials).Create)
             .Create();
         await DataContext.Filials.AddAsync(filial);
         await DataContext.SaveChangesAsync();
-        
-        var request = Fixture.Create<UpdateFilial>();
-        request.Id = filial.Id;
-        request.CompanyId = filial.CompanyId;
+
+        var request = Fixture.Build<UpdateFilial>()
+            .With(e => e.Id, filial.Id)
+            .With(e => e.CompanyId, filial.CompanyId)
+            .Create();
         
         var testHarness = new InMemoryTestHarness();
         testHarness.Consumer(() => Consumer);
-        
         await testHarness.Start(); 
         
         // Act
@@ -61,11 +59,10 @@ public class UpdateFilialTests : BaseTest
     public async Task UpdateNotCreatedFilial_ReturnsException()
     {
         // Arrange
-        var testHarness = new InMemoryTestHarness();
-        testHarness.Consumer(() => Consumer);
-
         var request = Fixture.Create<UpdateFilial>();
         
+        var testHarness = new InMemoryTestHarness();
+        testHarness.Consumer(() => Consumer);
         await testHarness.Start(); 
         
         // Act

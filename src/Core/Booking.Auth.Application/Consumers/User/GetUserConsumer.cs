@@ -5,29 +5,28 @@ using Otus.Booking.Common.Booking.Contracts.User.Requests;
 using Otus.Booking.Common.Booking.Contracts.User.Responses;
 using Otus.Booking.Common.Booking.Exceptions;
 
-namespace Booking.Auth.Application.Consumers.User
+namespace Booking.Auth.Application.Consumers.User;
+
+public sealed class GetUserConsumer : IConsumer<GetUserById>
 {
-    public sealed class GetUserConsumer : IConsumer<GetUserById>
+    private readonly IMapper _mapper;
+    private readonly IUserRepository _userRepository;
+
+    public GetUserConsumer(IMapper mapper, IUserRepository userRepository)
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IMapper _mapper;
+        _mapper = mapper;
+        _userRepository = userRepository;
+    }
 
-        public GetUserConsumer(IUserRepository userRepository, IMapper mapper)
-        {
-            _userRepository = userRepository;
-            _mapper = mapper;
-        }
+    public async Task Consume(ConsumeContext<GetUserById> context)
+    {
+        var request = context.Message;
 
-        public async Task Consume(ConsumeContext<GetUserById> context)
-        {
-            var request = context.Message;
+        var user = await _userRepository.FindByIdAsync(request.Id);
 
-            var user = await _userRepository.FindByIdAsync(request.Id);
+        if (user == null)
+            throw new NotFoundException($"User with ID {request.Id} doesn't exists");
 
-            if (user == null)
-                throw new NotFoundException($"User with ID {request.Id} doesn't exists");
-
-            await context.RespondAsync(_mapper.Map<GetUserResult>(user));
-        }
+        await context.RespondAsync(_mapper.Map<GetUserResult>(user));
     }
 }

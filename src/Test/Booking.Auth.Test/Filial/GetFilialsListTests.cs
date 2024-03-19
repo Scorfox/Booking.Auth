@@ -16,9 +16,8 @@ public class GetFilialsListTests:BaseTest
     public GetFilialsListTests()
     {
         var config = new MapperConfiguration(cfg => cfg.AddProfile<FilialMapper>());
-            
-        var filialRepository = new FilialRepository(DataContext);
-        Consumer = new GetFilialsListConsumer(filialRepository, new Mapper(config));
+        
+        Consumer = new GetFilialsListConsumer(new FilialRepository(DataContext), new Mapper(config));
     }
 
     [Test]
@@ -39,7 +38,6 @@ public class GetFilialsListTests:BaseTest
             
         var testHarness = new InMemoryTestHarness();
         testHarness.Consumer(() => Consumer);
-
         await testHarness.Start();
 
         var request = Fixture.Build<GetFilialsList>()

@@ -6,7 +6,7 @@ using Otus.Booking.Common.Booking.Exceptions;
 
 namespace Booking.Auth.Application.Consumers.Filial;
 
-public class DeleteFilialConsumer:IConsumer<DeleteFilial>
+public class DeleteFilialConsumer : IConsumer<DeleteFilial>
 {
     private readonly IFilialRepository _filialRepository;
 

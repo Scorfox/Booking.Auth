@@ -10,13 +10,13 @@ namespace Booking.Auth.Application.Consumers.User;
 
 public class UpdateUserConsumer : IConsumer<UpdateUser>
 {
-    private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
+    private readonly IUserRepository _userRepository;
 
-    public UpdateUserConsumer(IUserRepository userRepository, IMapper mapper)
+    public UpdateUserConsumer(IMapper mapper, IUserRepository userRepository)
     {
-        _userRepository = userRepository;
         _mapper = mapper;
+        _userRepository = userRepository;
     }
     
     public async Task Consume(ConsumeContext<UpdateUser> context)

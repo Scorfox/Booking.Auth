@@ -13,8 +13,7 @@ public class DeleteUserTests:BaseTest
 
     public DeleteUserTests()
     {
-        var userRepository = new UserRepository(DataContext);
-        Consumer = new DeleteUserConsumer(userRepository);
+        Consumer = new DeleteUserConsumer(new UserRepository(DataContext));
     }
 
     [Test]
@@ -24,14 +23,14 @@ public class DeleteUserTests:BaseTest
         var user = Fixture.Build<Domain.Entities.User>().Create();
         await DataContext.Users.AddAsync(user);
         await DataContext.SaveChangesAsync();
+
+        var request = Fixture.Build<DeleteUser>()
+            .With(e => e.Id, user.Id)
+            .Create();
         
         var testHarness = new InMemoryTestHarness();
         testHarness.Consumer(() => Consumer);
-
         await testHarness.Start();
-
-        var request = Fixture.Create<DeleteUser>();
-        request.Id = user.Id;
 
         // Act
         await testHarness.InputQueueSendEndpoint.Send(request);

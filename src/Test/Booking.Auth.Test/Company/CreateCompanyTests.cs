@@ -18,8 +18,8 @@ public class CreateCompanyTests : BaseTest
     public CreateCompanyTests()
     {
         var config = new MapperConfiguration(cfg => cfg.AddProfile<CompanyMapper>());
-        
         var companyRepository = new CompanyRepository(DataContext);
+        
         Consumer = new CreateCompanyConsumer(companyRepository, new Mapper(config));
     }
 
@@ -29,7 +29,6 @@ public class CreateCompanyTests : BaseTest
         // Arrange
         var testHarness = new InMemoryTestHarness();
         testHarness.Consumer(() => Consumer);
-        
         await testHarness.Start(); 
         
         // Act
@@ -50,19 +49,22 @@ public class CreateCompanyTests : BaseTest
     public async Task CreateCompany_WithNotUniqueInn_ReturnsException()
     {
         // Arrange
-        var testHarness = new InMemoryTestHarness();
-        testHarness.Consumer(() => Consumer);
         const string inn = "123";
         
-        var company = Fixture.Build<Domain.Entities.Company>().Without(e => e.Filials).Create();
-        company.Inn = inn;
+        var company = Fixture.Build<Domain.Entities.Company>()
+            .Without(e => e.Filials)
+            .With(e => e.Inn, inn)
+            .Create();
 
         await DataContext.Companies.AddAsync(company);
         await DataContext.SaveChangesAsync();
 
-        var request = Fixture.Create<CreateCompany>();
-        request.Inn = inn;
+        var request = Fixture.Build<CreateCompany>()
+            .With(e => e.Inn, inn)
+            .Create();
         
+        var testHarness = new InMemoryTestHarness();
+        testHarness.Consumer(() => Consumer);
         await testHarness.Start(); 
         
         // Act

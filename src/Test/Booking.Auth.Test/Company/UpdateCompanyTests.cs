@@ -17,8 +17,8 @@ public class UpdateCompanyTests : BaseTest
     public UpdateCompanyTests()
     {
         var config = new MapperConfiguration(cfg => cfg.AddProfile<CompanyMapper>());
-        
         var companyRepository = new CompanyRepository(DataContext);
+        
         Consumer = new UpdateCompanyConsumer(companyRepository, new Mapper(config));
     }
 
@@ -30,12 +30,12 @@ public class UpdateCompanyTests : BaseTest
         await DataContext.Companies.AddAsync(company);
         await DataContext.SaveChangesAsync();
         
-        var request = Fixture.Create<UpdateCompany>();
-        request.Id = company.Id;
+        var request = Fixture.Build<UpdateCompany>()
+            .With(e => e.Id, company.Id)
+            .Create();
         
         var testHarness = new InMemoryTestHarness();
         testHarness.Consumer(() => Consumer);
-        
         await testHarness.Start(); 
         
         // Act
@@ -57,11 +57,10 @@ public class UpdateCompanyTests : BaseTest
     public async Task UpdateNotCreatedCompany_ReturnsException()
     {
         // Arrange
-        var testHarness = new InMemoryTestHarness();
-        testHarness.Consumer(() => Consumer);
-
         var request = Fixture.Create<UpdateCompany>();
         
+        var testHarness = new InMemoryTestHarness();
+        testHarness.Consumer(() => Consumer);
         await testHarness.Start(); 
         
         // Act

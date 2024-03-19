@@ -9,13 +9,16 @@ public sealed class FilialMapper : Profile
 {
     public FilialMapper()
     {
+        // Create
         CreateMap<CreateFilial, Domain.Entities.Filial>();
         CreateMap<Domain.Entities.Filial, CreateFilialResult>();
         
+        // Read
+        CreateMap<Domain.Entities.Filial, GetFilialResult>();
+        CreateMap<Domain.Entities.Filial, FilialGettingDto>();
+        
+        // Update
         CreateMap<UpdateFilial, Domain.Entities.Filial>();
         CreateMap<Domain.Entities.Filial, UpdateFilialResult>();
-
-        CreateMap<Domain.Entities.Filial, FilialGettingDto>();
-        CreateMap<Domain.Entities.Filial, GetFilialResult>();
     }
 }

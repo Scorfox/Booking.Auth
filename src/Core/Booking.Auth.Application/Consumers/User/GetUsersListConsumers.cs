@@ -22,7 +22,8 @@ public class GetUsersListConsumers:IConsumer<GetUsersList>
     {
         var request = context.Message;
 
-        var users = await _userRepository.GetPaginatedListAsync(request.Offset, request.Count);
+        var users = await _userRepository.GetPaginatedListAsync
+            (request.Offset, request.Count, e => e.RoleId == request.RoleId);
 
         await context.RespondAsync(new GetUsersListResult
         {
