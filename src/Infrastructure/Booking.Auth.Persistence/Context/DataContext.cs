@@ -70,17 +70,6 @@ public class DataContext : DbContext
             Description = "Ну а как без неё?!",
             Inn = "987654321091",
             MainAddress = "company1@mail.ru",
-            Filials = new List<Filial>
-            {
-                new Filial
-                {
-                    Id = Guid.NewGuid(),
-                    CompanyId = companyId1,
-                    Name = "Чайхана #1",
-                    Address = "Ул. Пушкина дом Колотушкина",
-                    Description = "Спойлер: не #1"
-                }
-            }
         },
         new Company
         {
@@ -89,17 +78,25 @@ public class DataContext : DbContext
             Description = "Тиньков: Блять, я заплакал",
             Inn = "987654321092",
             MainAddress = "company2@mail.ru",
-            Filials = new List<Filial>
-            {
-                new Filial
-                {
-                    Id = Guid.NewGuid(),
-                    CompanyId = companyId2,
-                    Name = "Грустно и не вкусно",
-                    Address = "Везде",
-                    Description = "Description not found ;)"
-                }
-            }
         }]);
+
+        builder.Entity<Filial>().HasData([
+            new Filial
+            {
+                Id = Guid.NewGuid(),
+                CompanyId = companyId1,
+                Name = "Чайхана #1",
+                Address = "Ул. Пушкина дом Колотушкина",
+                Description = "Спойлер: не #1"
+            },
+            new Filial
+            {
+                Id = Guid.NewGuid(),
+                CompanyId = companyId2,
+                Name = "Грустно и не вкусно",
+                Address = "Везде",
+                Description = "Description not found ;)"
+            }
+        ]);
     }
 }
