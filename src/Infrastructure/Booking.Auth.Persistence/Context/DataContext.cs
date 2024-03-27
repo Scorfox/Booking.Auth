@@ -9,7 +9,7 @@ public class DataContext : DbContext
     {
         Database.EnsureCreated();
     }
-    
+
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<Role> Roles { get; set; } = null!;
     public DbSet<Company> Companies { get; set; } = null!;
@@ -20,23 +20,23 @@ public class DataContext : DbContext
         base.OnModelCreating(modelBuilder);
         FillDefaultData(modelBuilder);
     }
-    
+
     private static void FillDefaultData(ModelBuilder builder)
     {
         var rolesWithIds = Application.Common.Roles.GetAllRolesWithIds();
         var superAdminRole = new Role
         {
-            Id = rolesWithIds[Application.Common.Roles.SuperAdmin], 
-            Name = Application.Common.Roles.SuperAdmin, 
+            Id = rolesWithIds[Application.Common.Roles.SuperAdmin],
+            Name = Application.Common.Roles.SuperAdmin,
             IsActive = true
         };
-        
+
         builder.Entity<Role>().HasData([
             new Role {Id = rolesWithIds[Application.Common.Roles.Client], Name = Application.Common.Roles.Client, IsActive = true},
             new Role {Id = rolesWithIds[Application.Common.Roles.Admin], Name = Application.Common.Roles.Admin, IsActive = true},
             superAdminRole,
         ]);
-        
+
         builder.Entity<User>().HasData(new User
         {
             Id = Guid.NewGuid(),
@@ -52,5 +52,45 @@ public class DataContext : DbContext
             PhoneNumber = "5553555",
             RoleId = superAdminRole.Id
         });
+
+        var companyId1 = Guid.NewGuid();
+        var companyId2 = Guid.NewGuid();
+
+        builder.Entity<Company>().HasData([
+        new Company
+        {
+            Id = companyId1,
+            Name = "Чайхана",
+            Description = "Ну а как без неё?!",
+            Inn = "987654321091",
+            MainAddress = "company1@mail.ru",
+        },
+        new Company
+        {
+            Id = companyId2,
+            Name = "Грустно и не вкусно",
+            Description = "Тиньков: Блинб, я заплакал",
+            Inn = "987654321092",
+            MainAddress = "company2@mail.ru",
+        }]);
+
+        builder.Entity<Filial>().HasData([
+            new Filial
+            {
+                Id = Guid.NewGuid(),
+                CompanyId = companyId1,
+                Name = "Чайхана #1",
+                Address = "Ул. Пушкина дом Колотушкина",
+                Description = "Спойлер: не #1"
+            },
+            new Filial
+            {
+                Id = Guid.NewGuid(),
+                CompanyId = companyId2,
+                Name = "Грустно и не вкусно",
+                Address = "Везде",
+                Description = "Description not found ;)"
+            }
+        ]);
     }
 }
