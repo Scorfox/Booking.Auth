@@ -1,11 +1,5 @@
 ﻿using Booking.Auth.Domain.Entities;
-using MassTransit.Configuration;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using System.ComponentModel.Design;
-using System.Net;
-using System.Reflection.Emit;
-using System.Xml.Linq;
 
 namespace Booking.Auth.Persistence.Context;
 

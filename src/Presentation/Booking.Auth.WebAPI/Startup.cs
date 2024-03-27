@@ -6,7 +6,6 @@ using Booking.Auth.Application.Consumers.User;
 using Booking.Auth.Persistence;
 using Booking.Auth.WebAPI.Extensions;
 using MassTransit;
-using Microsoft.OpenApi.Models;
 
 namespace Booking.Auth.WebAPI;
 
