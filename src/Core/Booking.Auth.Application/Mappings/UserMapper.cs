@@ -15,8 +15,8 @@ public sealed class UserMapper : Profile
             .ForMember(d => d.Email, s => s.MapFrom(e => e.Email.ToLower()));
         CreateMap<User, CreateUserResult>()
             .ForMember(d => d.Email, s => s.MapFrom(e => e.Email.ToLower()));
-
-        // Read
+	
+	    // Read
         CreateMap<User, GetUserResult>();
         CreateMap<User, UserGettingDto>()
             .ForMember(d => d.Email, s => s.MapFrom(e => e.Email.ToLower()));

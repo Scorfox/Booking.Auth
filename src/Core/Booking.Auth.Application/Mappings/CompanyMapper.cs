@@ -13,7 +13,7 @@ public sealed class CompanyMapper : Profile
         CreateMap<CreateCompany, Domain.Entities.Company>();
         CreateMap<Domain.Entities.Company, CreateCompanyResult>();
         
-        // Create
+        // Read
         CreateMap<Domain.Entities.Company, CompanyGettingDto>();
         CreateMap<Domain.Entities.Company, GetCompanyResult>();
         

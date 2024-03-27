@@ -4,12 +4,13 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyVersion>1.0.0312.12917</AssemblyVersion>
-        <FileVersion>1.0.0312.12917</FileVersion>
+        <AssemblyVersion>1.0.0318.16380</AssemblyVersion>
+        <FileVersion>1.0.0318.16380</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.1" />
+      <PackageReference Include="Otus.Booking.Common" Version="0.0.0-g18b70d1075" />
     </ItemGroup>
 
 </Project>
