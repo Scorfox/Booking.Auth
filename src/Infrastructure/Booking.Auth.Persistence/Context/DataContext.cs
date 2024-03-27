@@ -76,7 +76,7 @@ public class DataContext : DbContext
         {
             Id = companyId2,
             Name = "Грустно и не вкусно",
-            Description = "Тиньков: Блять, я заплакал",
+            Description = "Тиньков: Блинб, я заплакал",
             Inn = "987654321092",
             MainAddress = "company2@mail.ru",
         }]);
